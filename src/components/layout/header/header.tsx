@@ -1,14 +1,25 @@
 import styled from '@emotion/styled'
+import { KakaoLogin } from '@utils'
 
 import { Outlet } from 'react-router-dom'
+import { accountTokenState } from '@store'
+import { useRecoilValue } from 'recoil'
+import Button from '@mui/material/Button'
 
 interface HeaderProps {
   children?: React.ReactElement
 }
 
 export function Header({ children }: HeaderProps) {
+  const accountToken: string | null = useRecoilValue(accountTokenState)
+
   const toHome = () => {
-    window.location.href = 'https://poomasi.github.io/'
+    window.location.href = '/'
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('account_token')
+    window.location.reload()
   }
 
   return (
@@ -19,10 +30,24 @@ export function Header({ children }: HeaderProps) {
             ㉬
           </div>
 
-          <StyledButton>
-            <KakaoIcon src="/assets/kakao-login-icon.png" alt="카카오 로그인 아이콘" />
-            카카오 로그인
-          </StyledButton>
+          {accountToken ? (
+            <Button
+              onClick={() => handleLogout()}
+              sx={{
+                fontSize: '19px',
+                padding: '3px 20px',
+                color: 'white',
+                backgroundColor: 'black',
+                '&:hover': {
+                  backgroundColor: 'var(--gray-color)',
+                },
+              }}
+            >
+              로그아웃
+            </Button>
+          ) : (
+            <KakaoLogin />
+          )}
         </HeaderContent>
       </HeaderContainer>
 
@@ -50,27 +75,4 @@ const HeaderContent = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 1200px;
-`
-
-const StyledButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: #fee500;
-  color: #000;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-
-  &:hover {
-    background-color: #ffeb3b;
-  }
-`
-const KakaoIcon = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
 `

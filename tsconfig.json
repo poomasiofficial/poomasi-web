@@ -28,7 +28,11 @@
       "@store": ["./store/index.ts"],
       "@store/*": ["./store/*"],
       "@hooks": ["./hooks/index.ts"],
-      "@hooks/*": ["./hooks/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@utils": ["./utils/index.ts"],
+      "@utils/*": ["./utils/*"],
+      "@api": ["./api/index.ts"],
+      "@api/*": ["./api/*"]
     }
   },
   "include": ["src"]

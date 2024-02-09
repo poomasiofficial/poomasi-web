@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 interface ProfileData {
   id: string
-  image: string
+  profile_image: string
   name: string
   field: string
   company1: string
@@ -30,7 +30,7 @@ export function ProfileCard({ profileData }: Props) {
     <Container>
       <CardConent onClick={() => handleProfileClick(profileData.id)}>
         <ProfilePictureWrapper>
-          <ProfileImage src={profileData.image} alt={'profile-image'} />
+          <ProfileImage src={profileData.profile_image} alt={'profile-image'} />
         </ProfilePictureWrapper>
         <ProfileName>{profileData.name}</ProfileName>
         <ProfileField>{profileData.field}</ProfileField>

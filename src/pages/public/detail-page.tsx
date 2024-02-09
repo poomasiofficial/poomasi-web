@@ -3,13 +3,27 @@ import { useToastClear } from '@hooks'
 import styled from '@emotion/styled'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useParams } from 'react-router-dom'
-import { profileDataList } from './components'
+import { AccountResponse, RequestApi } from '@api'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function DetailPage() {
   useToastClear()
+  const navigate = useNavigate()
   const { id } = useParams()
+  const [account, setAccount]: [AccountResponse | undefined, Function] = useState()
 
-  const profileData = profileDataList.find((profileData) => profileData.id === id)
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const account = await RequestApi.accounts.getAccount(id!)
+
+        setAccount(account)
+      } catch (error: any) {
+        navigate(-1)
+      }
+    })()
+  }, [])
 
   return (
     <Container>
@@ -17,19 +31,19 @@ export function DetailPage() {
         <PageContent>
           <Header>
             <ProfilePictureWrapper>
-              <ProfileImage src={profileData?.image} alt={'profile-image'} />
+              <ProfileImage src={account?.profile_image} alt={'profile-image'} />
             </ProfilePictureWrapper>
             <HeaderBody>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                <HeaderName>{profileData?.name}</HeaderName>
-                <HeaderField>{profileData?.field}</HeaderField>
+                <HeaderName>{account?.name}</HeaderName>
+                <HeaderField>{account?.field}</HeaderField>
               </div>
-              <HeaderJob>{profileData?.company1 + ' ' + profileData?.job1}</HeaderJob>
+              <HeaderJob>{'現 ' + account?.company1 + ' ' + account?.job1}</HeaderJob>
             </HeaderBody>
           </Header>
 
           <div style={{ marginTop: '30px', fontWeight: 'bold', fontSize: '20px' }}>자기소개</div>
-          <Description readOnly value={'안녕하세요.\n저는 개발자입니다.\n반가워용. ㅎㅎ~'} />
+          <Description readOnly value={account?.description} />
           <Body>---질의응답 테이블---</Body>
         </PageContent>
       </PageContainer>
