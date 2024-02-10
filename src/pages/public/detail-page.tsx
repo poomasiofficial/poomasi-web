@@ -33,11 +33,12 @@ export function DetailPage() {
             <ProfilePictureWrapper>
               <ProfileImage src={account?.profile_image} alt={'profile-image'} />
             </ProfilePictureWrapper>
+
             <HeaderBody>
-              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <ProfileSection>
                 <HeaderName>{account?.name}</HeaderName>
                 <HeaderField>{account?.field}</HeaderField>
-              </div>
+              </ProfileSection>
               <HeaderJob>{'現 ' + account?.company1 + ' ' + account?.job1}</HeaderJob>
             </HeaderBody>
           </Header>
@@ -90,6 +91,17 @@ const ProfileImage = styled.img`
   height: 100%;
   object-fit: contain;
 `
+const ProfileSection = styled.div`
+  display: flex;
+  align-items: flex-end;
+
+  @media (max-width: 520px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  /* background-color: red; */
+`
 
 const HeaderBody = styled.div`
   display: flex;
@@ -97,7 +109,7 @@ const HeaderBody = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-left: 30px;
-  padding-top: 40px;
+
   /* background-color: blue; */
 
   @media (max-width: 520px) {
@@ -119,6 +131,7 @@ const HeaderField = styled.div`
   color: var(--gray-color);
 
   @media (max-width: 520px) {
+    margin-left: 0;
     font-size: 23px;
   }
 `
