@@ -27,9 +27,7 @@ export function KakaoLoginCallback() {
 
             localStorage.setItem('account_token', kakaoLoginResponse.account_token)
 
-            setTimeout(() => {
-              navigate(-1)
-            }, 500)
+            window.location.href = 'http://poomasi.me'
           })()
         } catch (error: any) {
           console.log(error)
