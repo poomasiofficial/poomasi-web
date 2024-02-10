@@ -64,6 +64,12 @@ const Container = styled(Card)`
     width: 150px;
     height: 300px;
   }
+
+  // iphone mini
+  @media (max-width: 380px) {
+    width: 140px;
+    height: 290px;
+  }
 `
 const CardConent = styled(CardActionArea)`
   padding: 20px;
@@ -98,6 +104,11 @@ const ProfileField = styled.div`
   font-size: 17px;
   font-weight: bold;
   color: var(--gray-color);
+
+  // iphone mini
+  @media (max-width: 380px) {
+    font-size: 16px;
+  }
 `
 
 const ProfileHistory = styled.div`

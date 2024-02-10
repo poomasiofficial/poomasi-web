@@ -57,7 +57,7 @@ export function DetailPage() {
   const handleQuestionButtonClick = () => {
     if (!accountToken) {
       setIsErrorToastOpen(true)
-      setErrorToastMessage('로그인은 필수입니다!')
+      setErrorToastMessage('질문하려면 로그인이 필수입니다!')
       return
     }
 
@@ -293,6 +293,11 @@ const HeaderJob = styled.div`
   color: var(--light-gray-color);
   @media (max-width: 520px) {
     font-size: 16px;
+  }
+
+  // iphone mini
+  @media (max-width: 380px) {
+    font-size: 15px;
   }
 `
 
