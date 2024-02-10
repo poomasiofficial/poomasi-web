@@ -45,7 +45,9 @@ export function DetailPage() {
 
           <div style={{ marginTop: '30px', fontWeight: 'bold', fontSize: '20px' }}>자기소개</div>
           <Description readOnly value={account?.description} />
-          <Body>---질의응답 테이블---</Body>
+          <Body>
+            <QuestionArea />
+          </Body>
         </PageContent>
       </PageContainer>
     </Container>
@@ -109,10 +111,11 @@ const HeaderBody = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-left: 30px;
-
+  padding-top: 40px;
   /* background-color: blue; */
 
   @media (max-width: 520px) {
+    padding-top: 0;
     margin-left: 13px;
   }
 `
@@ -143,16 +146,25 @@ const HeaderJob = styled.div`
 `
 
 const Description = styled(TextareaAutosize)`
+  box-sizing: border-box;
   width: 100%;
   margin-top: 10px;
   border: none;
   outline: none;
   resize: none;
   font-size: 17px;
+  padding: 0;
   /* background-color: green; */
 `
 
 const Body = styled.div`
   margin-top: 30px;
   width: 100%;
+  background-color: red;
+`
+
+const QuestionArea = styled.textarea`
+  box-sizing: border-box;
+  width: 100%;
+  background-color: green;
 `
