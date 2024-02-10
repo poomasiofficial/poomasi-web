@@ -25,12 +25,12 @@ export function Toast() {
   return (
     <>
       <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={isErrorToastOpen} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%', marginBottom: '30px' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ marginBottom: '30px' }}>
           {errorToastMessage}
         </Alert>
       </Snackbar>
       <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={isSuccessToastOpen} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%', marginBottom: '30px' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ marginBottom: '30px' }}>
           {successToastMessage}
         </Alert>
       </Snackbar>
