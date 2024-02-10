@@ -27,7 +27,9 @@ export function KakaoLoginCallback() {
 
             localStorage.setItem('account_token', kakaoLoginResponse.account_token)
 
-            navigate(-1)
+            setTimeout(() => {
+              navigate(-1)
+            }, 500)
           })()
         } catch (error: any) {
           console.log(error)
