@@ -9,7 +9,7 @@ export const AccountsApi = {
     const form: FormData = new FormData()
     form.append('id_token', idToken)
 
-    return await requestHandler<KakaoLoginResponse>({ url: PATH + '/kakao-login', method: HttpMethod.POST, data: form })
+    return await requestHandler<KakaoLoginResponse>({ url: PATH + '/kakao-login/', method: HttpMethod.POST, data: form })
   },
 
   getAccountList: async (type: string = AccountType.ADMIN) => {

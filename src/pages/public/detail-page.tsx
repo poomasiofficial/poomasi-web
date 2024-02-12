@@ -14,9 +14,9 @@ import Switch from '@mui/material/Switch'
 import InputLabel from '@mui/material/InputLabel'
 import NativeSelect from '@mui/material/NativeSelect'
 import FormControl from '@mui/material/FormControl'
-import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
+import { DebouncedButton } from '@components'
 
 const QUESTION_MAX_LENGTH: number = 500
 
@@ -37,7 +37,8 @@ export function DetailPage() {
    */
   const [questionText, setQuestionText]: [string, Function] = useState('')
   const [isSecret, setIsSecret]: [boolean, Function] = useState(false)
-  const [careerYear, setCareerYear]: [string, Function] = useState('대학생')
+  // U(대학생), R(취준생), N(신입~3년차), S(3년차 이상)
+  const [careerYear, setCareerYear]: [string, Function] = useState('U')
   const [isMajor, setIsMajor]: [boolean, Function] = useState(true)
 
   const handleQuestionTextChange = (event: any) => {
@@ -54,27 +55,35 @@ export function DetailPage() {
   const handleIsMajorChange = (e: any, value: boolean) => {
     setIsMajor(value)
   }
+
   const handleQuestionButtonClick = () => {
     if (!accountToken) {
       setIsErrorToastOpen(true)
       setErrorToastMessage('질문하려면 로그인이 필수입니다!')
       return
     }
-
     if (questionText.length < 10) {
       setIsErrorToastOpen(true)
       setErrorToastMessage('질문은 10자 이상이어야 합니다!')
       return
     }
+    ;(async () => {
+      try {
+        await RequestApi.posts.postQna({ id, isSecret, careerYear, isMajor, questionText })
 
-    setQuestionText('')
-    setIsSecret(false)
-    setCareerYear('대학생')
-    setIsMajor(true)
-    setTimeout(() => {
-      setIsSuccessToastOpen(true)
-      setSuccessToastMessage('질문이 등록되었습니다.')
-    }, 1300)
+        setQuestionText('')
+        setIsSecret(false)
+        setCareerYear('U')
+        setIsMajor(true)
+        setTimeout(() => {
+          setIsSuccessToastOpen(true)
+          setSuccessToastMessage('질문이 등록되었습니다.')
+        }, 1300)
+      } catch (error: any) {
+        setIsErrorToastOpen(true)
+        setErrorToastMessage('질문 등록에 실패했습니다!')
+      }
+    })()
   }
 
   useEffect(() => {
@@ -87,7 +96,7 @@ export function DetailPage() {
         navigate(-1)
       }
     })()
-  }, [questionText, isSecret, careerYear, isMajor])
+  }, [])
 
   return (
     <Container>
@@ -144,7 +153,7 @@ export function DetailPage() {
                   </div>
                 )}
               </div>
-              <FormControlLabel style={{ margin: '0' }} control={<Switch checked={isSecret} onChange={handleIsSecretChange} />} label="비밀질문" />
+              <FormControlLabel style={{ margin: '0' }} control={<Switch checked={isSecret} onChange={handleIsSecretChange} />} label="비밀 질문" />
             </div>
 
             <QuestionArea
@@ -160,10 +169,10 @@ export function DetailPage() {
                     개발 경력
                   </InputLabel>
                   <NativeSelect value={careerYear} onChange={handleCareerYearChange}>
-                    <option value={'대학생'}>대학생</option>
-                    <option value={'취준생'}>취준생</option>
-                    <option value={'1~3년차'}>1~3년차</option>
-                    <option value={'3년차 이상'}>3년차 이상</option>
+                    <option value={'U'}>대학생</option>
+                    <option value={'R'}>취준생</option>
+                    <option value={'N'}>신입~3년차</option>
+                    <option value={'S'}>3년차 이상</option>
                   </NativeSelect>
                 </FormControl>
 
@@ -181,9 +190,10 @@ export function DetailPage() {
                 </RadioGroup>
               </div>
 
-              <Button
-                variant="contained"
+              <DebouncedButton
+                text={'등록'}
                 onClick={() => handleQuestionButtonClick()}
+                variant="contained"
                 sx={{
                   width: '60px',
                   height: '40px',
@@ -192,9 +202,7 @@ export function DetailPage() {
                   borderRadius: '10px',
                   color: 'white',
                 }}
-              >
-                등록
-              </Button>
+              />
             </div>
           </Body>
         </PageContent>

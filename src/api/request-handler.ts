@@ -1,5 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
+const getPoomasiAccountToken = (): string | null => {
+  return localStorage.getItem('account_token')
+}
+
 const instance: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   timeout: 3000,
@@ -7,6 +11,10 @@ const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    const account_token = getPoomasiAccountToken()
+
+    account_token ? (config.headers.Authorization = account_token) : null
+
     return config
   },
   (error) => {}
