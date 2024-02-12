@@ -16,9 +16,64 @@ import NativeSelect from '@mui/material/NativeSelect'
 import FormControl from '@mui/material/FormControl'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
+import Card from '@mui/material/Card'
 import { DebouncedButton } from '@components'
 
 const QUESTION_MAX_LENGTH: number = 500
+
+const datas = [
+  {
+    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
+    answer_text: '',
+    is_secret: false,
+    career_year: 'U',
+    is_major: true,
+    create_at: '2024.02.13',
+  },
+  {
+    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
+    answer_text: '',
+    is_secret: false,
+    career_year: 'U',
+    is_major: true,
+    create_at: '2024.02.13',
+  },
+  {
+    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
+    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
+    is_secret: false,
+    career_year: 'U',
+    is_major: true,
+    create_at: '2024.02.13',
+  },
+  {
+    question_text:
+      '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
+    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
+    is_secret: false,
+    career_year: 'U',
+    is_major: true,
+    create_at: '2024.02.13',
+  },
+  {
+    question_text:
+      '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
+    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
+    is_secret: false,
+    career_year: 'U',
+    is_major: true,
+    create_at: '2024.02.13',
+  },
+]
+
+const getCareerYearString = (career_year: string) => {
+  switch (career_year) {
+    case 'U':
+      return '대학생'
+    default:
+      return '대학생'
+  }
+}
 
 export function DetailPage() {
   useToastClear()
@@ -87,6 +142,7 @@ export function DetailPage() {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     ;(async () => {
       try {
         const account = await RequestApi.accounts.getAccount(id!)
@@ -121,7 +177,7 @@ export function DetailPage() {
 
           <Seperator />
 
-          <Body>
+          <QuestionBody>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex' }}>
                 <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문하기</div>
@@ -204,7 +260,49 @@ export function DetailPage() {
                 }}
               />
             </div>
-          </Body>
+          </QuestionBody>
+
+          <QuestionListBody>
+            <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문 History</div>
+
+            <SolidSeperator />
+
+            {datas.map((data) => (
+              <QnaSection>
+                <div>
+                  <QnaCard>
+                    <div>
+                      <span style={{ fontWeight: 'bold', fontSize: '25px', marginRight: '10px' }}>Q.</span>
+                      {data.question_text}
+                    </div>
+
+                    <br />
+
+                    <div style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                      data.career_year
+                    )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</div>
+                  </QnaCard>
+                </div>
+
+                {data.answer_text ? (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <QnaCard>
+                      <div>
+                        <span style={{ fontWeight: 'bold', fontSize: '25px', marginRight: '10px' }}>A.</span>
+                        {data.answer_text}
+                      </div>
+
+                      <br />
+
+                      <div style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`품앗이꾼 ${account?.name}`}</div>
+                    </QnaCard>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </QnaSection>
+            ))}
+          </QuestionListBody>
         </PageContent>
       </PageContainer>
     </Container>
@@ -213,7 +311,7 @@ export function DetailPage() {
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+
   padding-top: 80px;
 `
 const PageContainer = styled.div`
@@ -331,7 +429,7 @@ const Seperator = styled.div`
   margin-top: 30px;
 `
 
-const Body = styled.div`
+const QuestionBody = styled.div`
   margin-top: 20px;
   width: 100%;
   height: 300px;
@@ -354,4 +452,30 @@ const QuestionArea = styled.textarea`
     height: 40%;
   }
   /* background-color: green; */
+`
+
+const QuestionListBody = styled.div`
+  margin-top: 70px;
+  width: 100%;
+
+  /* background-color: greenyellow; */
+`
+const SolidSeperator = styled.div`
+  height: 4px;
+  width: 100%;
+  border-top: 2px var(--light-gray-color) solid;
+  margin-top: 13px;
+`
+
+const QnaSection = styled.div`
+  margin-bottom: 50px;
+  /* background-color: red; */
+`
+
+const QnaCard = styled(Card)`
+  background-color: #f5f5f5;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  padding: 20px;
+  width: 60%;
 `
