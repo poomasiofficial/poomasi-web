@@ -13,7 +13,9 @@ instance.interceptors.request.use(
   (config) => {
     const account_token = getPoomasiAccountToken()
 
-    account_token ? (config.headers.Authorization = account_token) : null
+    if (account_token) {
+      config.headers.Authorization = account_token
+    }
 
     return config
   },
