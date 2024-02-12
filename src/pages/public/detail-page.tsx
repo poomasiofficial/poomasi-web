@@ -271,30 +271,32 @@ export function DetailPage() {
               <QnaSection>
                 <div>
                   <QnaCard>
-                    <div>
-                      <span style={{ fontWeight: 'bold', fontSize: '25px', marginRight: '10px' }}>Q.</span>
+                    <QnaContent>
+                      <QnaHead>Q.</QnaHead>
                       {data.question_text}
-                    </div>
+                    </QnaContent>
 
                     <br />
 
-                    <div style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                    <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
                       data.career_year
-                    )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</div>
+                    )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
                   </QnaCard>
                 </div>
 
                 {data.answer_text ? (
                   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <QnaCard>
-                      <div>
-                        <span style={{ fontWeight: 'bold', fontSize: '25px', marginRight: '10px' }}>A.</span>
+                      <QnaContent>
+                        <QnaHead>A.</QnaHead>
                         {data.answer_text}
-                      </div>
+                      </QnaContent>
 
                       <br />
 
-                      <div style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`품앗이꾼 ${account?.name}`}</div>
+                      <QnaContent
+                        style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                      >{`품앗이꾼 ${account?.name}`}</QnaContent>
                     </QnaCard>
                   </div>
                 ) : (
@@ -469,7 +471,27 @@ const SolidSeperator = styled.div`
 
 const QnaSection = styled.div`
   margin-bottom: 50px;
-  /* background-color: red; */
+
+  @media (max-width: 520px) {
+    margin-bottom: 30px;
+  }
+`
+
+const QnaContent = styled.div`
+  @media (max-width: 520px) {
+    font-size: 14px;
+  }
+`
+
+const QnaHead = styled.span`
+  font-weight: bold;
+  font-size: 25px;
+  margin-right: 10px;
+
+  @media (max-width: 520px) {
+    font-size: 20px;
+    margin-right: 5px;
+  }
 `
 
 const QnaCard = styled(Card)`
@@ -478,4 +500,8 @@ const QnaCard = styled(Card)`
   margin-top: 20px;
   padding: 20px;
   width: 60%;
+
+  @media (max-width: 520px) {
+    width: 80%;
+  }
 `
