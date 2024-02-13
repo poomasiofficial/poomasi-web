@@ -365,7 +365,7 @@ export function DetailPage() {
                             style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
                           >{`품앗이꾼 ${account?.name}`}</QnaContent>
                         </BlurOverlay>
-                        <TextBlurOverlay>답변은 본인만 확인할 수 있어요 :)</TextBlurOverlay>
+                        <TextBlurOverlay>{accountToken ? '답변을 보려면 로그인을 해주세요 :)' : '답변은 본인만 확인할 수 있어요 :)'}</TextBlurOverlay>
                       </QnaCard>
                     </div>
                   )
