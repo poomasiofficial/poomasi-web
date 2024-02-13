@@ -2,6 +2,7 @@
  * Internal Services
  */
 export interface KakaoLoginResponse {
+  public_id: string
   account_token: string
 }
 

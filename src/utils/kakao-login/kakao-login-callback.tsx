@@ -25,6 +25,7 @@ export function KakaoLoginCallback() {
           ;(async () => {
             const kakaoLoginResponse = await RequestApi.accounts.postKakaoLogin(idToken)
 
+            localStorage.setItem('public_id', kakaoLoginResponse.public_id)
             localStorage.setItem('account_token', kakaoLoginResponse.account_token)
 
             window.location.href = 'https://poomasi.me'

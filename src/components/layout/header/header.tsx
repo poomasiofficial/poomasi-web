@@ -18,6 +18,7 @@ export function Header({ children }: HeaderProps) {
   }
 
   const handleLogout = () => {
+    localStorage.removeItem('public_id')
     localStorage.removeItem('account_token')
     window.location.reload()
   }

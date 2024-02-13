@@ -1,11 +1,18 @@
 import { useToastClear } from '@hooks'
-import { isErrorToastOpenState, errorToastMessageState, isSuccessToastOpenState, successToastMessageState, accountTokenState } from '@store'
+import {
+  isErrorToastOpenState,
+  errorToastMessageState,
+  isSuccessToastOpenState,
+  successToastMessageState,
+  accountTokenState,
+  publicIdState,
+} from '@store'
 import { useRecoilValue, useSetRecoilState, SetterOrUpdater } from 'recoil'
 
 import styled from '@emotion/styled'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useParams } from 'react-router-dom'
-import { AccountResponse, RequestApi } from '@api'
+import { AccountResponse, CareerYearType, RequestApi } from '@api'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -23,6 +30,7 @@ const QUESTION_MAX_LENGTH: number = 500
 
 const datas = [
   {
+    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '',
     is_secret: false,
@@ -31,14 +39,16 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
+    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '',
-    is_secret: false,
+    is_secret: true,
     career_year: 'U',
     is_major: true,
     create_at: '2024.02.13',
   },
   {
+    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
     is_secret: false,
@@ -47,6 +57,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
+    public_id: '8244d858-36d5-45cd-8e89-367a1ead6729',
     question_text:
       '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
@@ -56,6 +67,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
+    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text:
       '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
@@ -68,8 +80,14 @@ const datas = [
 
 const getCareerYearString = (career_year: string) => {
   switch (career_year) {
-    case 'U':
+    case CareerYearType.대학생:
       return '대학생'
+    case CareerYearType.취준생:
+      return '취준생'
+    case CareerYearType.신입_3년차:
+      return '신입~3년차'
+    case CareerYearType._3년차_이상:
+      return '3년차 이상'
     default:
       return '대학생'
   }
@@ -77,6 +95,7 @@ const getCareerYearString = (career_year: string) => {
 
 export function DetailPage() {
   useToastClear()
+  const publicId: string | null = useRecoilValue(publicIdState)
   const accountToken: string | null = useRecoilValue(accountTokenState)
   const setIsErrorToastOpen: SetterOrUpdater<boolean> = useSetRecoilState(isErrorToastOpenState)
   const setErrorToastMessage: SetterOrUpdater<string> = useSetRecoilState(errorToastMessageState)
@@ -93,7 +112,7 @@ export function DetailPage() {
   const [questionText, setQuestionText]: [string, Function] = useState('')
   const [isSecret, setIsSecret]: [boolean, Function] = useState(false)
   // U(대학생), R(취준생), N(신입~3년차), S(3년차 이상)
-  const [careerYear, setCareerYear]: [string, Function] = useState('U')
+  const [careerYear, setCareerYear]: [string, Function] = useState(CareerYearType.대학생)
   const [isMajor, setIsMajor]: [boolean, Function] = useState(true)
 
   const handleQuestionTextChange = (event: any) => {
@@ -128,7 +147,7 @@ export function DetailPage() {
 
         setQuestionText('')
         setIsSecret(false)
-        setCareerYear('U')
+        setCareerYear(CareerYearType.대학생)
         setIsMajor(true)
         setTimeout(() => {
           setIsSuccessToastOpen(true)
@@ -225,10 +244,10 @@ export function DetailPage() {
                     개발 경력
                   </InputLabel>
                   <NativeSelect value={careerYear} onChange={handleCareerYearChange}>
-                    <option value={'U'}>대학생</option>
-                    <option value={'R'}>취준생</option>
-                    <option value={'N'}>신입~3년차</option>
-                    <option value={'S'}>3년차 이상</option>
+                    <option value={CareerYearType.대학생}>대학생</option>
+                    <option value={CareerYearType.취준생}>취준생</option>
+                    <option value={CareerYearType.신입_3년차}>신입~3년차</option>
+                    <option value={CareerYearType._3년차_이상}>3년차 이상</option>
                   </NativeSelect>
                 </FormControl>
 
@@ -269,36 +288,87 @@ export function DetailPage() {
 
             {datas.map((data) => (
               <QnaSection>
-                <div>
+                {data.is_secret ? (
                   <QnaCard>
-                    <QnaContent>
-                      <QnaHead>Q.</QnaHead>
-                      {data.question_text}
-                    </QnaContent>
-
-                    <br />
-
-                    <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
-                      data.career_year
-                    )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
+                    <BlurOverlay>
+                      {/* <QnaContent>
+                        <QnaHead>Q.</QnaHead>
+                        안녕하세요 :)
+                        <br />
+                        비밀 질문입니다. 비밀 질문입니다. 비밀 질문입니다.
+                        <br />
+                        비밀 질문입니다.비밀 질문입니다.비밀 질문입니다.비밀 질문입니다.
+                      </QnaContent> */}
+                      <div style={{ display: 'flex' }}>
+                        <QnaHead>Q.</QnaHead>
+                        <QnaContentArea readOnly value={data.question_text} />
+                      </div>
+                      <br />
+                      <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                        data.career_year
+                      )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
+                    </BlurOverlay>
+                    <TextBlurOverlay>비밀 질문이에요.</TextBlurOverlay>
                   </QnaCard>
-                </div>
-
-                {data.answer_text ? (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                ) : (
+                  <div>
                     <QnaCard>
-                      <QnaContent>
-                        <QnaHead>A.</QnaHead>
-                        {data.answer_text}
-                      </QnaContent>
+                      <div style={{ display: 'flex' }}>
+                        <QnaHead>Q.</QnaHead>
+                        <QnaContentArea readOnly value={data.question_text} />
+                      </div>
 
                       <br />
 
-                      <QnaContent
-                        style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
-                      >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                      <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                        data.career_year
+                      )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
                     </QnaCard>
                   </div>
+                )}
+
+                {data.answer_text ? (
+                  publicId === data.public_id ? (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <QnaCard>
+                        <div style={{ display: 'flex' }}>
+                          <QnaHead>A.</QnaHead>
+                          <QnaContentArea readOnly value={data.answer_text} />
+                        </div>
+
+                        <br />
+
+                        <QnaContent
+                          style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                        >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                      </QnaCard>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <QnaCard>
+                        <BlurOverlay>
+                          {/* <QnaContent>
+                            <QnaHead>A.</QnaHead>
+                            안녕하세요 :)
+                            <br />
+                            본인만 확인할 수 있어요 진짜로요 정말 본인만 내용 확인이 가능합니다.
+                            <br />
+                            답변이 궁금하시다면 질문을 하시는 건 어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ 답변이 궁금하시다면 질문을 하시는 건
+                            어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ 답변이 궁금하시다면 질문을 하시는 건 어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ
+                          </QnaContent> */}
+                          <div style={{ display: 'flex' }}>
+                            <QnaHead>A.</QnaHead>
+                            <QnaContentArea readOnly value={data.answer_text} />
+                          </div>
+                          <br />
+                          <QnaContent
+                            style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                          >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                        </BlurOverlay>
+                        <TextBlurOverlay>답변은 본인만 확인할 수 있어요 :)</TextBlurOverlay>
+                      </QnaCard>
+                    </div>
+                  )
                 ) : (
                   <></>
                 )}
@@ -460,6 +530,10 @@ const QuestionListBody = styled.div`
   margin-top: 70px;
   width: 100%;
 
+  @media (max-width: 520px) {
+    margin-top: 0;
+  }
+
   /* background-color: greenyellow; */
 `
 const SolidSeperator = styled.div`
@@ -477,6 +551,21 @@ const QnaSection = styled.div`
   }
 `
 
+const QnaContentArea = styled(TextareaAutosize)`
+  outline: none;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: none;
+  resize: none;
+
+  @media (max-width: 520px) {
+    font-size: 14px;
+  }
+`
+
 const QnaContent = styled.div`
   @media (max-width: 520px) {
     font-size: 14px;
@@ -484,11 +573,13 @@ const QnaContent = styled.div`
 `
 
 const QnaHead = styled.span`
+  margin-top: -6px;
   font-weight: bold;
   font-size: 25px;
   margin-right: 10px;
 
   @media (max-width: 520px) {
+    margin-top: -4px;
     font-size: 20px;
     margin-right: 5px;
   }
@@ -500,8 +591,29 @@ const QnaCard = styled(Card)`
   margin-top: 20px;
   padding: 20px;
   width: 60%;
+  position: relative;
 
   @media (max-width: 520px) {
     width: 80%;
   }
+`
+
+const BlurOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+  filter: blur(7px);
+  -webkit-filter: blur(7px);
+`
+const TextBlurOverlay = styled.div`
+  font-size: 24px;
+  word-break: keep-all;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  font-weight: bold;
 `
