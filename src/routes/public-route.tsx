@@ -1,9 +1,12 @@
 import { Layout } from '@components'
 import { DetailPage, LandingPage } from '@pages'
-import { KakaoLoginCallback } from '@utils'
+import { KakaoLoginCallback, PageviewTracker } from '@utils'
 import { Route, Routes } from 'react-router-dom'
 
 export function PublicRoute() {
+  // GA pageview tracker
+  PageviewTracker()
+
   return (
     <Routes>
       <Route element={<Layout />}>
