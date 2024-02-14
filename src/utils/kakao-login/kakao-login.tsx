@@ -1,7 +1,16 @@
 import styled from '@emotion/styled'
 import { KAKAO_LOGIN_URL } from './variables'
+import { useLocation } from 'react-router-dom'
 
 export function KakaoLogin() {
+  const location = useLocation()
+
+  const beforeLoginUrl: string = location.pathname
+
+  if (!beforeLoginUrl.includes('kakao-login-callback')) {
+    localStorage.setItem('before_login_url', beforeLoginUrl)
+  }
+
   return (
     <KakaoLoginButton onClick={() => (window.location.href = KAKAO_LOGIN_URL)}>
       <KakaoIcon src="/assets/kakao-login-icon.png" alt="카카오 로그인 아이콘" />

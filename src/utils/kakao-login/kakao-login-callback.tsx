@@ -2,11 +2,8 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import { REDIRECT_URI, REST_API_KEY } from './variables'
 import { RequestApi } from '@api'
-import { useNavigate } from 'react-router-dom'
 
 export function KakaoLoginCallback() {
-  const navigate = useNavigate()
-
   useEffect(() => {
     const params = new URL(document.location.toString()).searchParams
     const code = params.get('code')
@@ -27,8 +24,10 @@ export function KakaoLoginCallback() {
 
             localStorage.setItem('public_id', kakaoLoginResponse.public_id)
             localStorage.setItem('account_token', kakaoLoginResponse.account_token)
+            const beforeLoginUrl: string | null = localStorage.getItem('before_login_url')
+            localStorage.removeItem('before_login_url')
 
-            window.location.href = 'https://poomasi.me'
+            window.location.href = beforeLoginUrl ? beforeLoginUrl : 'https://poomasi.me'
           })()
         } catch (error: any) {
           console.log(error)

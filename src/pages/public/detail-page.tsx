@@ -105,6 +105,7 @@ export function DetailPage() {
 
   const navigate = useNavigate()
   const { id } = useParams()
+  const [isLoading, setIsLoading]: [boolean, Function] = useState(false)
   const [account, setAccount]: [AccountResponse | undefined, Function] = useState()
   const [qnas, setQnas]: [Array<GetQnaListResponse>, Function] = useState([])
   const [qnaListType, setQnaListType]: [QnaListType, Function] = useState(QnaListType.ALL)
@@ -156,10 +157,14 @@ export function DetailPage() {
         setIsSecret(false)
         setCareerYear(CareerYearType.대학생)
         setIsMajor(true)
+
         setTimeout(() => {
           setIsSuccessToastOpen(true)
           setSuccessToastMessage('질문이 등록되었습니다.')
         }, 1300)
+
+        const qnas = await RequestApi.posts.getQnaList(qnaListType, id)
+        setQnas(qnas)
       } catch (error: any) {
         setIsErrorToastOpen(true)
         setErrorToastMessage('질문 등록에 실패했습니다!')
@@ -169,6 +174,8 @@ export function DetailPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
+
+    setIsLoading(true)
     ;(async () => {
       try {
         const account = await RequestApi.accounts.getAccount(id)
@@ -176,7 +183,9 @@ export function DetailPage() {
 
         const qnas = await RequestApi.posts.getQnaList(qnaListType, id)
         setQnas(qnas)
+        setIsLoading(false)
       } catch (error: any) {
+        setIsLoading(false)
         navigate(-1)
       }
     })()
@@ -193,210 +202,220 @@ export function DetailPage() {
     <Container>
       <PageContainer>
         <PageContent>
-          <Header>
-            <ProfilePictureWrapper>
-              <ProfileImage src={account?.profile_image} alt={'profile-image'} />
-            </ProfilePictureWrapper>
+          {isLoading ? (
+            <>Loading...</>
+          ) : (
+            <>
+              <Header>
+                <ProfilePictureWrapper>
+                  <ProfileImage src={account?.profile_image} alt={'profile-image'} />
+                </ProfilePictureWrapper>
 
-            <HeaderBody>
-              <ProfileSection>
-                <HeaderName>{account?.name}</HeaderName>
-                <HeaderField>{account?.field}</HeaderField>
-              </ProfileSection>
-              <HeaderJob>{'現 ' + account?.company1 + ' ' + account?.job1}</HeaderJob>
-            </HeaderBody>
-          </Header>
+                <HeaderBody>
+                  <ProfileSection>
+                    <HeaderName>{account?.name}</HeaderName>
+                    <HeaderField>{account?.field}</HeaderField>
+                  </ProfileSection>
+                  <HeaderJob>{'現 ' + account?.company1 + ' ' + account?.job1}</HeaderJob>
+                </HeaderBody>
+              </Header>
 
-          <div style={{ marginTop: '30px', fontWeight: 'bold', fontSize: '20px' }}>품앗이꾼 소개</div>
-          <Description readOnly value={account?.description} />
+              <div style={{ marginTop: '30px', fontWeight: 'bold', fontSize: '20px' }}>품앗이꾼 소개</div>
+              <Description readOnly value={account?.description} />
 
-          <Seperator />
+              <Seperator />
 
-          <QuestionBody>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex' }}>
-                <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문하기</div>
-                {questionText.length === 500 ? (
-                  <div
-                    style={{
-                      fontSize: '16px',
-                      marginLeft: '3px',
-                      marginTop: '2px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      color: 'red',
-                    }}
-                  >
-                    {`(${questionText.length} / 500)`}
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      fontSize: '16px',
-                      marginLeft: '3px',
-                      marginTop: '2px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      color: 'var(--gray-color)',
-                    }}
-                  >
-                    {`(${questionText.length} / 500)`}
-                  </div>
-                )}
-              </div>
-              <FormControlLabel style={{ margin: '0' }} control={<Switch checked={isSecret} onChange={handleIsSecretChange} />} label="비밀 질문" />
-            </div>
-
-            <QuestionArea
-              value={questionText}
-              onChange={handleQuestionTextChange}
-              placeholder="타인에게 피해를 입힐 수 있는 과도한 질문은 자제해 주세요."
-            />
-
-            <div style={{ marginTop: '7px', display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex' }}>
-                <FormControl>
-                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                    개발 경력
-                  </InputLabel>
-                  <NativeSelect value={careerYear} onChange={handleCareerYearChange}>
-                    <option value={CareerYearType.대학생}>대학생</option>
-                    <option value={CareerYearType.취준생}>취준생</option>
-                    <option value={CareerYearType.신입_3년차}>신입~3년차</option>
-                    <option value={CareerYearType._3년차_이상}>3년차 이상</option>
-                  </NativeSelect>
-                </FormControl>
-
-                <RadioGroup row style={{ marginLeft: '7px' }}>
-                  <FormControlLabel
-                    value="전공"
-                    control={<Radio size="small" checked={isMajor} onChange={(e) => handleIsMajorChange(e, true)} />}
-                    label="전공"
-                  />
-                  <FormControlLabel
-                    value="비전공"
-                    control={<Radio size="small" checked={!isMajor} onChange={(e) => handleIsMajorChange(e, false)} />}
-                    label="비전공"
-                  />
-                </RadioGroup>
-              </div>
-
-              <DebouncedButton
-                text={'등록'}
-                onClick={() => handleQuestionButtonClick()}
-                variant="contained"
-                sx={{
-                  width: '60px',
-                  height: '40px',
-                  fontSize: '16px',
-                  fontWeight: 'bold',
-                  borderRadius: '10px',
-                  color: 'white',
-                }}
-              />
-            </div>
-          </QuestionBody>
-
-          <QuestionListBody>
-            <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문 History</div>
-
-            <BadgeContainer>
-              <Badge onClick={() => handleClickBadge(QnaListType.ALL)} word={'전체'} />
-              <Badge onClick={() => handleClickBadge(QnaListType.ME)} word={'내질문'} />
-            </BadgeContainer>
-
-            <SolidSeperator />
-
-            {qnas.length === 0 ? (
-              <div
-                style={{
-                  width: '100%',
-                  height: '200px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '24px',
-                }}
-              >
-                아직 질문이 없네요 :D
-              </div>
-            ) : (
-              qnas.map((qna: GetQnaListResponse) => (
-                <QnaSection key={qna.public_id}>
-                  {qna.is_secret && qna.questioner_public_id !== publicId ? (
-                    <QnaCard>
-                      <BlurOverlay>
-                        <div style={{ display: 'flex' }}>
-                          <QnaHead>Q.</QnaHead>
-                          <QnaContentArea readOnly value={qna.question_text} />
-                        </div>
-                        <br />
-                        <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
-                          qna.career_year
-                        )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
-                      </BlurOverlay>
-                      <TextBlurOverlay>비밀 질문이에요.</TextBlurOverlay>
-                    </QnaCard>
-                  ) : (
-                    <div>
-                      <QnaCard>
-                        <div style={{ display: 'flex' }}>
-                          <QnaHead>Q.</QnaHead>
-                          <QnaContentArea readOnly value={qna.question_text} />
-                        </div>
-
-                        <br />
-
-                        <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
-                          qna.career_year
-                        )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
-                      </QnaCard>
-                    </div>
-                  )}
-
-                  {qna.answer_text ? (
-                    publicId === qna.questioner_public_id ? (
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <QnaCard>
-                          <div style={{ display: 'flex' }}>
-                            <QnaHead>A.</QnaHead>
-                            <QnaContentArea readOnly value={qna.answer_text} />
-                          </div>
-
-                          <br />
-
-                          <QnaContent
-                            style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
-                          >{`품앗이꾼 ${account?.name}`}</QnaContent>
-                        </QnaCard>
+              <QuestionBody>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문하기</div>
+                    {questionText.length === 500 ? (
+                      <div
+                        style={{
+                          fontSize: '16px',
+                          marginLeft: '3px',
+                          marginTop: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          color: 'red',
+                        }}
+                      >
+                        {`(${questionText.length} / 500)`}
                       </div>
                     ) : (
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <div
+                        style={{
+                          fontSize: '16px',
+                          marginLeft: '3px',
+                          marginTop: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          color: 'var(--gray-color)',
+                        }}
+                      >
+                        {`(${questionText.length} / 500)`}
+                      </div>
+                    )}
+                  </div>
+                  <FormControlLabel
+                    style={{ margin: '0' }}
+                    control={<Switch checked={isSecret} onChange={handleIsSecretChange} />}
+                    label="비밀 질문"
+                  />
+                </div>
+
+                <QuestionArea
+                  value={questionText}
+                  onChange={handleQuestionTextChange}
+                  placeholder="타인에게 피해를 입힐 수 있는 과도한 질문은 자제해 주세요."
+                />
+
+                <div style={{ marginTop: '7px', display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex' }}>
+                    <FormControl>
+                      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                        개발 경력
+                      </InputLabel>
+                      <NativeSelect value={careerYear} onChange={handleCareerYearChange}>
+                        <option value={CareerYearType.대학생}>대학생</option>
+                        <option value={CareerYearType.취준생}>취준생</option>
+                        <option value={CareerYearType.신입_3년차}>신입~3년차</option>
+                        <option value={CareerYearType._3년차_이상}>3년차 이상</option>
+                      </NativeSelect>
+                    </FormControl>
+
+                    <RadioGroup row style={{ marginLeft: '7px' }}>
+                      <FormControlLabel
+                        value="전공"
+                        control={<Radio size="small" checked={isMajor} onChange={(e) => handleIsMajorChange(e, true)} />}
+                        label="전공"
+                      />
+                      <FormControlLabel
+                        value="비전공"
+                        control={<Radio size="small" checked={!isMajor} onChange={(e) => handleIsMajorChange(e, false)} />}
+                        label="비전공"
+                      />
+                    </RadioGroup>
+                  </div>
+
+                  <DebouncedButton
+                    text={'등록'}
+                    onClick={() => handleQuestionButtonClick()}
+                    variant="contained"
+                    sx={{
+                      width: '60px',
+                      height: '40px',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      borderRadius: '10px',
+                      color: 'white',
+                    }}
+                  />
+                </div>
+              </QuestionBody>
+
+              <QuestionListBody>
+                <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문 History</div>
+
+                <BadgeContainer>
+                  <Badge onClick={() => handleClickBadge(QnaListType.ALL)} word={'전체'} />
+                  <Badge onClick={() => handleClickBadge(QnaListType.ME)} word={'내질문'} />
+                </BadgeContainer>
+
+                <SolidSeperator />
+
+                {qnas.length === 0 ? (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '200px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '24px',
+                    }}
+                  >
+                    아직 질문이 없네요 :D
+                  </div>
+                ) : (
+                  qnas.map((qna: GetQnaListResponse) => (
+                    <QnaSection key={qna.public_id}>
+                      {qna.is_secret && qna.questioner_public_id !== publicId ? (
                         <QnaCard>
                           <BlurOverlay>
                             <div style={{ display: 'flex' }}>
-                              <QnaHead>A.</QnaHead>
-                              <QnaContentArea readOnly value={qna.answer_text} />
+                              <QnaHead>Q.</QnaHead>
+                              <QnaContentArea readOnly value={qna.question_text} />
                             </div>
                             <br />
-                            <QnaContent
-                              style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
-                            >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                            <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                              qna.career_year
+                            )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
                           </BlurOverlay>
-                          <TextBlurOverlay>
-                            {accountToken ? '답변은 본인만 확인할 수 있어요 :)' : '답변을 보려면 로그인을 해주세요 :)'}
-                          </TextBlurOverlay>
+                          <TextBlurOverlay>비밀 질문이에요.</TextBlurOverlay>
                         </QnaCard>
-                      </div>
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </QnaSection>
-              ))
-            )}
-          </QuestionListBody>
+                      ) : (
+                        <div>
+                          <QnaCard>
+                            <div style={{ display: 'flex' }}>
+                              <QnaHead>Q.</QnaHead>
+                              <QnaContentArea readOnly value={qna.question_text} />
+                            </div>
+
+                            <br />
+
+                            <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                              qna.career_year
+                            )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
+                          </QnaCard>
+                        </div>
+                      )}
+
+                      {qna.answer_text ? (
+                        publicId === qna.questioner_public_id ? (
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <QnaCard>
+                              <div style={{ display: 'flex' }}>
+                                <QnaHead>A.</QnaHead>
+                                <QnaContentArea readOnly value={qna.answer_text} />
+                              </div>
+
+                              <br />
+
+                              <QnaContent
+                                style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                              >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                            </QnaCard>
+                          </div>
+                        ) : (
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <QnaCard>
+                              <BlurOverlay>
+                                <div style={{ display: 'flex' }}>
+                                  <QnaHead>A.</QnaHead>
+                                  <QnaContentArea readOnly value={qna.answer_text} />
+                                </div>
+                                <br />
+                                <QnaContent
+                                  style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                                >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                              </BlurOverlay>
+                              <TextBlurOverlay>
+                                {accountToken ? '답변은 본인만 확인할 수 있어요 :)' : '답변을 보려면 로그인을 해주세요 :)'}
+                              </TextBlurOverlay>
+                            </QnaCard>
+                          </div>
+                        )
+                      ) : (
+                        <></>
+                      )}
+                    </QnaSection>
+                  ))
+                )}
+              </QuestionListBody>
+            </>
+          )}
         </PageContent>
       </PageContainer>
     </Container>
