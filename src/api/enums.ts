@@ -17,3 +17,8 @@ export enum CareerYearType {
   신입_3년차 = 'N',
   _3년차_이상 = 'S',
 }
+
+export enum QnaListType {
+  ALL = 'ALL',
+  ME = 'ME',
+}

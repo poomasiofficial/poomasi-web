@@ -1,5 +1,6 @@
-import { HttpMethod } from '@api/enums'
+import { HttpMethod, QnaListType } from '@api/enums'
 import requestHandler from '@api/request-handler'
+import { GetQnaListResponse } from '@api/types'
 
 const PATH = '/posts'
 
@@ -13,5 +14,9 @@ export const PostsApi = {
     form.append('question_text', questionText)
 
     return await requestHandler<null>({ url: PATH + '/qna/', method: HttpMethod.POST, data: form })
+  },
+
+  getQnaList: async (type: string = QnaListType.ALL, id?: string) => {
+    return await requestHandler<Array<GetQnaListResponse>>({ url: PATH + `/qna?type=${type}&nickname=${id}` })
   },
 }

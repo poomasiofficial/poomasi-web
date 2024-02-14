@@ -28,3 +28,14 @@ export interface AccountResponse {
   description: string
   is_vacation: boolean
 }
+
+export interface GetQnaListResponse {
+  public_id: string
+  is_secret: boolean
+  career_year: string
+  is_major: boolean
+  question_text: string
+  answer_text: string
+  questioner_public_id: string
+  created_at: string
+}

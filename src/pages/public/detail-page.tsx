@@ -12,7 +12,7 @@ import { useRecoilValue, useSetRecoilState, SetterOrUpdater } from 'recoil'
 import styled from '@emotion/styled'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useParams } from 'react-router-dom'
-import { AccountResponse, CareerYearType, RequestApi } from '@api'
+import { AccountResponse, CareerYearType, GetQnaListResponse, QnaListType, RequestApi } from '@api'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,13 +24,14 @@ import FormControl from '@mui/material/FormControl'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import Card from '@mui/material/Card'
-import { DebouncedButton } from '@components'
+import Grid from '@mui/material/Grid'
+import { DebouncedButton, Badge } from '@components'
 
 const QUESTION_MAX_LENGTH: number = 500
 
 const datas = [
   {
-    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
+    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '',
     is_secret: false,
@@ -39,7 +40,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
-    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
+    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '',
     is_secret: true,
@@ -48,7 +49,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
-    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
+    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
     is_secret: false,
@@ -57,7 +58,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
-    public_id: '8244d858-36d5-45cd-8e89-367a1ead6729',
+    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6729',
     question_text:
       '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
@@ -67,7 +68,7 @@ const datas = [
     create_at: '2024.02.13',
   },
   {
-    public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
+    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
     question_text:
       '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
     answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
@@ -105,6 +106,8 @@ export function DetailPage() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [account, setAccount]: [AccountResponse | undefined, Function] = useState()
+  const [qnas, setQnas]: [Array<GetQnaListResponse>, Function] = useState([])
+  const [qnaListType, setQnaListType]: [QnaListType, Function] = useState(QnaListType.ALL)
 
   /**
    * Question info
@@ -114,6 +117,10 @@ export function DetailPage() {
   // U(대학생), R(취준생), N(신입~3년차), S(3년차 이상)
   const [careerYear, setCareerYear]: [string, Function] = useState(CareerYearType.대학생)
   const [isMajor, setIsMajor]: [boolean, Function] = useState(true)
+
+  const handleClickBadge = (word: string) => {
+    setQnaListType(word)
+  }
 
   const handleQuestionTextChange = (event: any) => {
     if (event.target.value.length <= QUESTION_MAX_LENGTH) {
@@ -164,14 +171,23 @@ export function DetailPage() {
     window.scrollTo(0, 0)
     ;(async () => {
       try {
-        const account = await RequestApi.accounts.getAccount(id!)
-
+        const account = await RequestApi.accounts.getAccount(id)
         setAccount(account)
+
+        const qnas = await RequestApi.posts.getQnaList(qnaListType, id)
+        setQnas(qnas)
       } catch (error: any) {
         navigate(-1)
       }
     })()
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      const qnas = await RequestApi.posts.getQnaList(qnaListType, id)
+      setQnas(qnas)
+    })()
+  }, [qnaListType])
 
   return (
     <Container>
@@ -282,98 +298,104 @@ export function DetailPage() {
           </QuestionBody>
 
           <QuestionListBody>
-            <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문 History</div>
+            <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문 History</div>
+
+            <BadgeContainer>
+              <Badge onClick={() => handleClickBadge(QnaListType.ALL)} word={'전체'} />
+              <Badge onClick={() => handleClickBadge(QnaListType.ME)} word={'내질문'} />
+            </BadgeContainer>
 
             <SolidSeperator />
 
-            {datas.map((data) => (
-              <QnaSection>
-                {data.is_secret ? (
-                  <QnaCard>
-                    <BlurOverlay>
-                      {/* <QnaContent>
-                        <QnaHead>Q.</QnaHead>
-                        안녕하세요 :)
-                        <br />
-                        비밀 질문입니다. 비밀 질문입니다. 비밀 질문입니다.
-                        <br />
-                        비밀 질문입니다.비밀 질문입니다.비밀 질문입니다.비밀 질문입니다.
-                      </QnaContent> */}
-                      <div style={{ display: 'flex' }}>
-                        <QnaHead>Q.</QnaHead>
-                        <QnaContentArea readOnly value={data.question_text} />
-                      </div>
-                      <br />
-                      <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
-                        data.career_year
-                      )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
-                    </BlurOverlay>
-                    <TextBlurOverlay>비밀 질문이에요.</TextBlurOverlay>
-                  </QnaCard>
-                ) : (
-                  <div>
+            {qnas.length === 0 ? (
+              <div
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '24px',
+                }}
+              >
+                아직 질문이 없네요 :D
+              </div>
+            ) : (
+              qnas.map((qna: GetQnaListResponse) => (
+                <QnaSection key={qna.public_id}>
+                  {qna.is_secret && qna.questioner_public_id !== publicId ? (
                     <QnaCard>
-                      <div style={{ display: 'flex' }}>
-                        <QnaHead>Q.</QnaHead>
-                        <QnaContentArea readOnly value={data.question_text} />
-                      </div>
-
-                      <br />
-
-                      <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
-                        data.career_year
-                      )} / ${data.is_major ? '전공' : '비전공'} / ${data.create_at}`}</QnaContent>
+                      <BlurOverlay>
+                        <div style={{ display: 'flex' }}>
+                          <QnaHead>Q.</QnaHead>
+                          <QnaContentArea readOnly value={qna.question_text} />
+                        </div>
+                        <br />
+                        <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                          qna.career_year
+                        )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
+                      </BlurOverlay>
+                      <TextBlurOverlay>비밀 질문이에요.</TextBlurOverlay>
                     </QnaCard>
-                  </div>
-                )}
-
-                {data.answer_text ? (
-                  publicId === data.public_id ? (
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  ) : (
+                    <div>
                       <QnaCard>
                         <div style={{ display: 'flex' }}>
-                          <QnaHead>A.</QnaHead>
-                          <QnaContentArea readOnly value={data.answer_text} />
+                          <QnaHead>Q.</QnaHead>
+                          <QnaContentArea readOnly value={qna.question_text} />
                         </div>
 
                         <br />
 
-                        <QnaContent
-                          style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
-                        >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                        <QnaContent style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}>{`${getCareerYearString(
+                          qna.career_year
+                        )} / ${qna.is_major ? '전공' : '비전공'} / ${qna.created_at}`}</QnaContent>
                       </QnaCard>
                     </div>
-                  ) : (
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <QnaCard>
-                        <BlurOverlay>
-                          {/* <QnaContent>
-                            <QnaHead>A.</QnaHead>
-                            안녕하세요 :)
-                            <br />
-                            본인만 확인할 수 있어요 진짜로요 정말 본인만 내용 확인이 가능합니다.
-                            <br />
-                            답변이 궁금하시다면 질문을 하시는 건 어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ 답변이 궁금하시다면 질문을 하시는 건
-                            어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ 답변이 궁금하시다면 질문을 하시는 건 어떨까요? 그럽 질문에서 뵙겠습니다. ㅎㅎ
-                          </QnaContent> */}
+                  )}
+
+                  {qna.answer_text ? (
+                    publicId === qna.questioner_public_id ? (
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <QnaCard>
                           <div style={{ display: 'flex' }}>
                             <QnaHead>A.</QnaHead>
-                            <QnaContentArea readOnly value={data.answer_text} />
+                            <QnaContentArea readOnly value={qna.answer_text} />
                           </div>
+
                           <br />
+
                           <QnaContent
                             style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
                           >{`품앗이꾼 ${account?.name}`}</QnaContent>
-                        </BlurOverlay>
-                        <TextBlurOverlay>{accountToken ? '답변은 본인만 확인할 수 있어요 :)' : '답변을 보려면 로그인을 해주세요 :)'}</TextBlurOverlay>
-                      </QnaCard>
-                    </div>
-                  )
-                ) : (
-                  <></>
-                )}
-              </QnaSection>
-            ))}
+                        </QnaCard>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <QnaCard>
+                          <BlurOverlay>
+                            <div style={{ display: 'flex' }}>
+                              <QnaHead>A.</QnaHead>
+                              <QnaContentArea readOnly value={qna.answer_text} />
+                            </div>
+                            <br />
+                            <QnaContent
+                              style={{ color: 'var(--gray-color)', display: 'flex', justifyContent: 'flex-end' }}
+                            >{`품앗이꾼 ${account?.name}`}</QnaContent>
+                          </BlurOverlay>
+                          <TextBlurOverlay>
+                            {accountToken ? '답변은 본인만 확인할 수 있어요 :)' : '답변을 보려면 로그인을 해주세요 :)'}
+                          </TextBlurOverlay>
+                        </QnaCard>
+                      </div>
+                    )
+                  ) : (
+                    <></>
+                  )}
+                </QnaSection>
+              ))
+            )}
           </QuestionListBody>
         </PageContent>
       </PageContainer>
@@ -536,11 +558,16 @@ const QuestionListBody = styled.div`
 
   /* background-color: greenyellow; */
 `
+
+const BadgeContainer = styled(Grid)`
+  width: 100%;
+`
+
 const SolidSeperator = styled.div`
   height: 4px;
   width: 100%;
   border-top: 2px var(--light-gray-color) solid;
-  margin-top: 13px;
+  margin-top: 10px;
 `
 
 const QnaSection = styled.div`

@@ -16,7 +16,7 @@ export const AccountsApi = {
     return await requestHandler<Array<AccountListResponse>>({ url: PATH + `/?type=${type}` })
   },
 
-  getAccount: async (id: string) => {
+  getAccount: async (id?: string) => {
     return await requestHandler<Array<AccountListResponse>>({ url: PATH + `/${id}` })
   },
 }
