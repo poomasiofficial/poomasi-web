@@ -51,7 +51,7 @@ export function ProfileCard({ profileData }: Props) {
             </CardConent>
           </BlurOverlay>
           <TextBlurOverlay>
-            <div style={{ fontSize: '100px' }}>🏖</div> 휴가를 떠났어요.
+            <div style={{ fontSize: '100px' }}>🏖</div> 휴가를 떠났어요 :D
           </TextBlurOverlay>
         </div>
       ) : (
