@@ -33,7 +33,7 @@ export function PeopleSection() {
         <Badge onClick={() => handleClickBadge('Android')} word={'Android'} />
         <Badge onClick={() => handleClickBadge('iOS')} word={'iOS'} />
         <Badge onClick={() => handleClickBadge('Data')} word={'Data'} />
-        <Badge onClick={() => handleClickBadge('AI/ML')} word={'AI/ML'} />
+        {/* <Badge onClick={() => handleClickBadge('AI/ML')} word={'AI/ML'} /> */}
       </BadgeContainer>
 
       <div style={{ maxHeight: '800px', overflowY: 'auto' }}>
