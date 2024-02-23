@@ -36,7 +36,7 @@ export function PeopleSection() {
         {/* <Badge onClick={() => handleClickBadge('AI/ML')} word={'AI/ML'} /> */}
       </BadgeContainer>
 
-      <div style={{ maxHeight: '800px', overflowY: 'auto' }}>
+      <div>
         <PeopleContainer container style={{ margin: '0 auto' }}>
           {accountList
             .filter((account) => {

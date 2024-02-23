@@ -227,7 +227,7 @@ export function DetailPage() {
 
               <QuestionBody>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex' }}>
+                  <div style={{ display: 'flex', marginBottom: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '20px' }}>질문하기</div>
                     {questionText.length === 500 ? (
                       <div
@@ -257,11 +257,11 @@ export function DetailPage() {
                       </div>
                     )}
                   </div>
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     style={{ margin: '0' }}
                     control={<Switch checked={isSecret} onChange={handleIsSecretChange} />}
                     label="비밀 질문"
-                  />
+                  /> */}
                 </div>
 
                 <QuestionArea
