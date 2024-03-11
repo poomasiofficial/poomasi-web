@@ -43,7 +43,7 @@ export function DescriptionSection() {
           명과 <StatusCountUp duration={5} end={qnaCount} />
           번의
         </div>
-        <StatusRightText>품앗이를 나누었어요. 🌱</StatusRightText>
+        <StatusRightText>품을 나누었어요. 🌱</StatusRightText>
       </Status>
     </Container>
   )
