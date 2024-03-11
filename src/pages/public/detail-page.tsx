@@ -29,56 +29,6 @@ import { DebouncedButton, Badge } from '@components'
 
 const QUESTION_MAX_LENGTH: number = 500
 
-const datas = [
-  {
-    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
-    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    answer_text: '',
-    is_secret: false,
-    career_year: 'U',
-    is_major: true,
-    create_at: '2024.02.13',
-  },
-  {
-    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
-    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    answer_text: '',
-    is_secret: true,
-    career_year: 'U',
-    is_major: true,
-    create_at: '2024.02.13',
-  },
-  {
-    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
-    question_text: '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요',
-    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
-    is_secret: false,
-    career_year: 'U',
-    is_major: true,
-    create_at: '2024.02.13',
-  },
-  {
-    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6729',
-    question_text:
-      '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
-    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
-    is_secret: false,
-    career_year: 'U',
-    is_major: true,
-    create_at: '2024.02.13',
-  },
-  {
-    questioner_public_id: '8244d858-36d5-45cd-8e89-367a1ead6721',
-    question_text:
-      '안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요녕하세요안녕하세요',
-    answer_text: '하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요하이요',
-    is_secret: false,
-    career_year: 'U',
-    is_major: true,
-    create_at: '2024.02.13',
-  },
-]
-
 const getCareerYearString = (career_year: string) => {
   switch (career_year) {
     case CareerYearType.대학생:

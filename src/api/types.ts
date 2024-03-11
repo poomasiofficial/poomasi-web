@@ -39,3 +39,8 @@ export interface GetQnaListResponse {
   questioner_public_id: string
   created_at: string
 }
+
+export interface GetQnaStatusResponse {
+  account_count: number
+  qna_count: number
+}

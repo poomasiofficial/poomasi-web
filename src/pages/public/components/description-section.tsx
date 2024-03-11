@@ -1,6 +1,25 @@
+import { RequestApi } from '@api'
 import styled from '@emotion/styled'
+import { useEffect, useState } from 'react'
+import CountUp from 'react-countup'
 
 export function DescriptionSection() {
+  const [accountCount, setAccountCount]: [number, Function] = useState(85)
+  const [qnaCount, setQnaCount]: [number, Function] = useState(37)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const qnaStaus = await RequestApi.posts.getQnaStatus()
+        setAccountCount(qnaStaus.account_count)
+        setQnaCount(qnaStaus.qna_count)
+      } catch (error: any) {
+        setAccountCount(85)
+        setQnaCount(37)
+      }
+    })()
+  }, [])
+
   return (
     <Container>
       <Seperator />
@@ -17,6 +36,15 @@ export function DescriptionSection() {
         <br />
         <br /> 👉 이용 방법 : 로그인 후 도움받고 싶은 품앗이꾼에게 질문 작성
       </Description>
+
+      <Status>
+        <div>
+          현재, <StatusCountUp duration={5} end={accountCount} />
+          명과 <StatusCountUp duration={5} end={qnaCount} />
+          번의
+        </div>
+        <StatusRightText>품앗이를 나누었어요. 🌱</StatusRightText>
+      </Status>
     </Container>
   )
 }
@@ -47,4 +75,30 @@ const Description = styled.div`
   @media (max-width: 520px) {
     font-size: 15px;
   }
+`
+
+const Status = styled.div`
+  line-height: 1.6;
+  font-size: 35px;
+
+  color: var(--gray-color);
+  margin-top: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: green; */
+
+  @media (max-width: 520px) {
+    font-size: 27px;
+    flex-direction: column;
+  }
+`
+
+const StatusCountUp = styled(CountUp)`
+  font-weight: bold;
+  color: #6cb11a;
+`
+const StatusRightText = styled.div`
+  margin-left: 7px;
 `
