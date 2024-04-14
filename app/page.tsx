@@ -1,4 +1,4 @@
-import { DescriptionSection, FooterSection, LandingPage, PeopleSection, TitleSection } from "@page";
+import { DescriptionSection, FooterSection, PeopleSection, TitleSection } from "@page";
 
 export default function Home() {
   return (
