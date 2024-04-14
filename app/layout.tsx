@@ -23,7 +23,6 @@ export default function RootLayout({
       <link
         rel="stylesheet"
         as="style"
-        precedence="default"
         crossOrigin="anonymous"
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css"
       />

@@ -82,7 +82,7 @@ const DiaryPostPage = () => {
   const 문제검색 = async () => {
     setShowTip(false);
     try {
-      const data = await RequestApi.posts.getLinkInfo(link);
+      const data: any = await RequestApi.posts.getLinkInfo(link);
       if (data?.site_name === "" || data?.name === "") {
         setIsErrorToastOpen(true);
         setErrorToastMessage("현재 문제검색 기능은 백준, 프로그래머스만 지원하고 있어요 ");

@@ -1,5 +1,5 @@
 "use client";
-import { RequestApi } from "@api";
+import { RequestApi, getCoteDiaryMainResponse } from "@api";
 import { accountTokenState } from "@store";
 import { KakaoLogin } from "@utils";
 import Image from "next/image";
@@ -10,8 +10,8 @@ import { useRecoilValue } from "recoil";
 const CoteDiaryPage = () => {
   const accountToken: string | null = useRecoilValue(accountTokenState);
 
-  const [recentDiary, setRecentDiary] = useState();
-  const [activityRecord, setActivityRecord] = useState();
+  const [recentDiary, setRecentDiary] = useState<any>();
+  const [activityRecord, setActivityRecord] = useState<any>();
   useEffect(() => {
     (async () => {
       try {
@@ -63,7 +63,7 @@ const CoteDiaryPage = () => {
                 </div>
 
                 <div className="pt-[20px] flex gap-[20px] flex-wrap ">
-                  {recentDiary?.map((diary) => (
+                  {recentDiary?.map((diary: any) => (
                     <Link
                       href={`cote-diary/${diary?.public_id}`}
                       key={diary?.public_id}
@@ -107,7 +107,7 @@ const CoteDiaryPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {activityRecord?.map((item, index) => (
+                      {activityRecord?.map((item: any, index: number) => (
                         <tr key={index} className="border-solid border-b-[1px] border-[#C8C8C8]">
                           <td className="border border-gray-400 px-4 py-2 text-[#747474]">{item?.category}</td>
                           <td className="border border-gray-400 px-4 py-2 text-center text-[#747474]">{item?.count}</td>

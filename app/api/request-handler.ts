@@ -24,7 +24,7 @@ const fetchWrapper = async (url: string, options: RequestInit = {}): Promise<Res
   return response;
 };
 
-export default async function requestHandler<T>(url: string, options?: {}): Promise<T | null> {
+export default async function requestHandler<T>(url: string, options?: {}): Promise<T> {
   const response = await fetchWrapper(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, options);
   if (response.ok) {
     try {

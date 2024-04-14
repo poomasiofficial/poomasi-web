@@ -41,11 +41,11 @@ export function PeopleSection() {
       <div className="flex">
         <div className="flex flex-wrap  ">
           {accountList
-            .filter((account) => {
+            .filter((account: any) => {
               if (selectedField === "전체") return true;
               else return account.field === selectedField;
             })
-            .map((account) => (
+            .map((account: any) => (
               <ProfileCard key={account.id} profileData={account} />
             ))}
         </div>

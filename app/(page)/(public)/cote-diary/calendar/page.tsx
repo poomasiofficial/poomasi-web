@@ -143,7 +143,7 @@ const DiaryCalendarPage = () => {
               {diaryList && diaryList?.length > 0 ? (
                 <ul className="flex flex-col gap-[20px] my-[20px] md:mt-[30px] overflow-y-scroll h-[70%] md:h-[460px]">
                   {Array.isArray(diaryList) &&
-                    diaryList?.map((diary) =>
+                    diaryList?.map((diary: any) =>
                       selectedFilter === "" || selectedFilter === diary?.incorrect_type ? (
                         <Link href={`/cote-diary/${diary?.public_id}`} key={diary?.public_id}>
                           <li className="flex flex-col w-full h-[123px] bg-[white] rounded-xl p-[18px] cursor-pointer">
