@@ -1,39 +1,42 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
     "paths": {
-      "@styles": ["./styles/index.ts"],
-      "@styles/*": ["./styles/*"],
-      "@routes": ["./routes/index.ts"],
-      "@routes/*": ["./routes/*"],
-      "@pages": ["./pages/index.ts"],
-      "@pages/*": ["./pages/*"],
-      "@components": ["./components/index.ts"],
-      "@components/*": ["./components/*"],
-      "@store": ["./store/index.ts"],
-      "@store/*": ["./store/*"],
-      "@hooks": ["./hooks/index.ts"],
-      "@hooks/*": ["./hooks/*"],
-      "@utils": ["./utils/index.ts"],
-      "@utils/*": ["./utils/*"],
-      "@api": ["./api/index.ts"],
-      "@api/*": ["./api/*"]
+      "@page": ["./app/(page)/index.ts"],
+      "@page/*": ["./app/(page)/*"],
+      "@api": ["./app/api/index.ts"],
+      "@api/*": ["./app/api/*"],
+      "@assets": ["./app/assets/index.ts"],
+      "@assets/*": ["./app/assets/*"],
+      "@components": ["./app/components/index.ts"],
+      "@components/*": ["./app/components/*"],
+      "@hooks": ["./app/hooks/index.ts"],
+      "@hooks/*": ["./app/hooks/*"],
+      "@store": ["./app/store/index.ts"],
+      "@store/*": ["./app/store/*"],
+      "@styles": ["./app/styles/index.ts"],
+      "@styles/*": ["./app/styles/*"],
+      "@utils": ["./app/utils/index.ts"],
+      "@utils/*": ["./app/utils/*"]
     }
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

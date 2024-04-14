@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --gray-color: #717171;
+    --light-gray-color: #aaaaaa;
+}
