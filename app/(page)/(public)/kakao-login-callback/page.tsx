@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { REDIRECT_URI, REST_API_KEY } from "@utils/kakao-login/variables";
 import { RequestApi } from "@api";
 import { LocalStorage } from "@utils";
@@ -48,7 +48,11 @@ const KakaoLoginCallback = () => {
     fetchData();
   }, [code]);
 
-  return <p className="pt-[80px] px-[5%]">Login...</p>;
+  return (
+    <Suspense>
+      <p className="pt-[80px] px-[5%]">Login...</p>
+    </Suspense>
+  );
 };
 
 export default KakaoLoginCallback;

@@ -1,47 +1,32 @@
-import { ReactNode } from "react";
 import { DescriptionSection, FooterSection, PeopleSection, TitleSection } from "@page";
 
 export const LandingPage = () => {
-  interface WrapperProps {
-    children: ReactNode;
-  }
-  const Container = ({ children }: WrapperProps) => {
-    return <div className="w-full pt-20">{children}</div>;
-  };
-
-  const PageContainer = ({ children }: WrapperProps) => {
-    return <div className="flex items-center justify-center w-full px-[5%]">{children}</div>;
-  };
-
-  const PageContent = ({ children }: WrapperProps) => {
-    return <div className="w-[1200px] mb-10">{children}</div>;
-  };
-
   return (
-    <Container>
-      <PageContainer>
-        <PageContent>
+    <div className="w-full pt-20">
+      <div className="flex items-center justify-center w-full px-[5%]">
+        <div className="w-[1200px] mb-10">
           <TitleSection />
-        </PageContent>
-      </PageContainer>
+        </div>
+      </div>
 
-      <PageContainer>
-        <PageContent>
+      <div className="flex items-center justify-center w-full px-[5%]">
+        <div className="w-[1200px] mb-10">
           <DescriptionSection />
-        </PageContent>
-      </PageContainer>
+        </div>
+        <div />
 
-      <PageContainer>
-        <PageContent>
-          <PeopleSection />
-        </PageContent>
-      </PageContainer>
+        <div className="flex items-center justify-center w-full px-[5%]">
+          <div className="w-[1200px] mb-10">
+            <PeopleSection />
+          </div>
+        </div>
 
-      <PageContainer>
-        <PageContent>
-          <FooterSection />
-        </PageContent>
-      </PageContainer>
-    </Container>
+        <div className="flex items-center justify-center w-full px-[5%]">
+          <div className="w-[1200px] mb-10">
+            <FooterSection />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

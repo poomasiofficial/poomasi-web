@@ -6,6 +6,7 @@ import "@styles/reset.css";
 import { Header } from "@components";
 import { RecoilRootProvider } from "@utils";
 import { Toast } from "@components";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "대학생 전문 상담 멘토링, 품앗이",
