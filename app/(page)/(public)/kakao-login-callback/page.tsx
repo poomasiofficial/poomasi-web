@@ -6,6 +6,14 @@ import { LocalStorage } from "@utils";
 import { useSearchParams } from "next/navigation";
 
 const KakaoLoginCallback = () => {
+  return (
+    <Suspense>
+      <KaKao />
+    </Suspense>
+  );
+};
+
+const KaKao = () => {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const grantType = "authorization_code";
@@ -48,11 +56,6 @@ const KakaoLoginCallback = () => {
     fetchData();
   }, [code]);
 
-  return (
-    <Suspense>
-      <p className="pt-[80px] px-[5%]">Login...</p>
-    </Suspense>
-  );
+  return <p className="pt-[80px] px-[5%]">Login...</p>;
 };
-
 export default KakaoLoginCallback;

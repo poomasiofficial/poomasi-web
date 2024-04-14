@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { DescriptionSection, FooterSection, PeopleSection, TitleSection } from "@page";
 
 export const LandingPage = () => {
@@ -13,18 +14,17 @@ export const LandingPage = () => {
         <div className="w-[1200px] mb-10">
           <DescriptionSection />
         </div>
-        <div />
+      </div>
 
-        <div className="flex items-center justify-center w-full px-[5%]">
-          <div className="w-[1200px] mb-10">
-            <PeopleSection />
-          </div>
+      <div className="flex items-center justify-center w-full px-[5%]">
+        <div className="w-[1200px] mb-10">
+          <PeopleSection />
         </div>
+      </div>
 
-        <div className="flex items-center justify-center w-full px-[5%]">
-          <div className="w-[1200px] mb-10">
-            <FooterSection />
-          </div>
+      <div className="flex items-center justify-center w-full px-[5%]">
+        <div className="w-[1200px] mb-10">
+          <FooterSection />
         </div>
       </div>
     </div>
