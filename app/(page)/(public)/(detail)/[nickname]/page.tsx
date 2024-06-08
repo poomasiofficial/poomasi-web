@@ -168,121 +168,159 @@ export default function DetailPage() {
 
                 <div className="ml-[13px] pt-0 flex flex-col justify-between w-full md:ml-[30px] md:pt-10">
                   <div className="flex flex-col items-start md:flex-row md:items-end">
-                    <div className="text-3xl font-bold md:text-[40px]">{account?.name}</div>
-                    <div className="text-[23px] ml-0 font-bold md:text-3xl text-[var(--gray-color)] md:ml-2.5">
+                    <div className="text-3xl font-bold md:text-[40px] text-[#1E1E1E]">{account?.name}</div>
+                    <div className="mt-[5px] md:mt-[0px] text-[14px] md:text-[23px] ml-0 md:text-xl text-[#1E1E1E] md:ml-2.5 rounded bg-[#D7E0F9] py-[3px] px-[10px]">
                       {account?.field}
                     </div>
                   </div>
-                  <div className="sm:text-base text-[15px] md:text-xl font-bold text-[var(--light-gray-color)]">
+                  <div className="sm:text-base text-[15px] md:text-xl font-semibold text-[var(--light-gray-color)]">
                     {"現 " + account?.company1 + " " + account?.job1}
                   </div>
                 </div>
               </div>
 
-              <div style={{ marginTop: "30px", fontWeight: "bold", fontSize: "20px" }}>품앗이꾼 소개</div>
               <TextareaAutosize
-                className="text-sm md:text-[17px] box-border w-full resize-none mt-2.5 p-0 border-none outline-none"
+                className="text-[#495057] text-sm md:text-[17px] box-border w-full resize-none mt-12 p-0 border-none outline-none"
                 readOnly
                 value={account?.description}
               />
 
-              <div className="h-1 w-full mt-[30px] border-t-[3px] border-dashed" />
-
-              <div className="w-full h-[300px] mt-5">
+              <div className="w-full h-[250px] md:h-[300px] mt-5">
                 <div className="flex justify-between">
                   <div className="flex">
-                    <div className="flex items-center font-bold text-xl">질문하기</div>
+                    <div className="flex items-center font-semibold text-2xl text-[#1E1E1E]">질문하기</div>
                     {questionText.length === 500 ? (
-                      <div className="text-base flex items-center text-[red] ml-[3px] mt-0.5">
+                      <div className="text-base flex items-center text-[red] ml-[10px] mt-0.5">
                         {`(${questionText.length} / 500)`}
                       </div>
                     ) : (
-                      <div className="text-base flex items-center text-[color:var(--gray-color)] ml-[3px] mt-0.5">
+                      <div className="text-base flex items-center text-[color:var(--gray-color)] ml-[10px] mt-0.5">
                         {`(${questionText.length} / 500)`}
                       </div>
                     )}
                   </div>
+                </div>
+                <div className="flex justify-between mt-2 flex-col md:flex-row">
+                  <div style={{ marginTop: "7px", display: "flex" }} className="justify-start md:justify-between">
+                    <div style={{ display: "flex" }} className="flex-col md:flex-row">
+                      <div className="flex items-center ">
+                        <label className="mr-[10px]">개발 경력</label>
+                        <select
+                          className="bg-[#F7F8F9] py-[5px] px-[6px] md:px-[10px] rounded"
+                          value={careerYear}
+                          onChange={handleCareerYearChange}
+                        >
+                          <option value={CareerYearType.대학생}>대학생</option>
+                          <option value={CareerYearType.취준생}>취준생</option>
+                          <option value={CareerYearType.신입_3년차}>신입~3년차</option>
+                          <option value={CareerYearType._3년차_이상}>3년차 이상</option>
+                        </select>
+                        <RadioGroup row className="ml-[10px] md:ml-[15px]">
+                          <FormControlLabel
+                            value="전공"
+                            control={
+                              <Radio
+                                sx={{
+                                  "&.Mui-checked": {
+                                    color: "#65BD57",
+                                  },
+                                }}
+                                size="small"
+                                checked={isMajor}
+                                onChange={(e) => handleIsMajorChange(e, true)}
+                              />
+                            }
+                            label="전공"
+                          />
+                          <FormControlLabel
+                            sx={{ marginRight: "0" }}
+                            value="비전공"
+                            control={
+                              <Radio
+                                sx={{
+                                  "&.Mui-checked": {
+                                    color: "#65BD57",
+                                  },
+                                }}
+                                size="small"
+                                checked={!isMajor}
+                                onChange={(e) => handleIsMajorChange(e, false)}
+                              />
+                            }
+                            label="비전공"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
                   <FormControlLabel
                     className="m-0"
-                    control={<Switch checked={isSecret} onChange={handleIsSecretChange} />}
+                    control={
+                      <Switch
+                        sx={{
+                          "& .MuiSwitch-switchBase.Mui-checked": {
+                            color: "#65BD57",
+                          },
+                          "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                            backgroundColor: "#65BD57",
+                          },
+                        }}
+                        checked={isSecret}
+                        onChange={handleIsSecretChange}
+                      />
+                    }
                     label="비밀 질문"
                   />
                 </div>
-
                 <textarea
-                  className="text-[15px] h-2/5 outline-[#1976d2] md:text-base box-border w-full md:h-3/5 resize-none mt-[5px] p-5 rounded-[10px] border border-[light-dark(rgb(118,118,118),rgb(133,133,133))] border-solid"
+                  className="text-[15px] h-2/5 outline-[#65BD57] md:text-base box-border w-full md:h-3/5 resize-none mt-[10px] p-5 rounded-[10px] border border-[#65BD57] border-solid"
                   value={questionText}
                   onChange={handleQuestionTextChange}
                   placeholder="타인에게 피해를 입힐 수 있는 과도한 질문은 자제해 주세요."
                 />
-
-                <div style={{ marginTop: "7px", display: "flex", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex" }}>
-                    <FormControl>
-                      <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                        개발 경력
-                      </InputLabel>
-                      <NativeSelect value={careerYear} onChange={handleCareerYearChange}>
-                        <option value={CareerYearType.대학생}>대학생</option>
-                        <option value={CareerYearType.취준생}>취준생</option>
-                        <option value={CareerYearType.신입_3년차}>신입~3년차</option>
-                        <option value={CareerYearType._3년차_이상}>3년차 이상</option>
-                      </NativeSelect>
-                    </FormControl>
-
-                    <RadioGroup row style={{ marginLeft: "7px" }}>
-                      <FormControlLabel
-                        value="전공"
-                        control={
-                          <Radio size="small" checked={isMajor} onChange={(e) => handleIsMajorChange(e, true)} />
-                        }
-                        label="전공"
-                      />
-                      <FormControlLabel
-                        value="비전공"
-                        control={
-                          <Radio size="small" checked={!isMajor} onChange={(e) => handleIsMajorChange(e, false)} />
-                        }
-                        label="비전공"
-                      />
-                    </RadioGroup>
-                  </div>
-
-                  <DebouncedButton
-                    text={"등록"}
-                    onClick={() => handleQuestionButtonClick()}
-                    variant="contained"
-                    sx={{
-                      width: "60px",
-                      height: "40px",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      borderRadius: "10px",
-                      color: "white",
-                    }}
-                  />
-                </div>
               </div>
+              <DebouncedButton
+                text={"등록하기"}
+                onClick={() => handleQuestionButtonClick()}
+                variant="contained"
+                sx={{
+                  width: "120px",
+                  height: "48px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  borderRadius: "10px",
+                  color: "white",
+                  float: "right",
+                  background: "#65BD57",
+                  boxShadow: "none",
+                }}
+              />
 
-              <div className="mt-0 w-full md:mt-[70px]">
+              <div className="mt-[70px] w-full">
+                <div className="h-1 w-full mt-2.5 mb-5 border-t-2 border-solid border-[#D9D9D9]" />
                 <div
+                  className="text-2xl font-semibold"
                   style={{
                     marginBottom: "10px",
                     display: "flex",
                     alignItems: "center",
-                    fontWeight: "bold",
-                    fontSize: "20px",
                   }}
                 >
-                  질문 History
+                  질문
                 </div>
 
                 <div className="flex w-full">
-                  <Badge onClick={() => handleClickBadge(QnaListType.ALL)} word={"전체"} />
-                  <Badge onClick={() => handleClickBadge(QnaListType.ME)} word={"내질문"} />
+                  <Badge
+                    onClick={() => handleClickBadge(QnaListType.ALL)}
+                    word={"전체"}
+                    isSelected={qnaListType === QnaListType.ALL}
+                  />
+                  <Badge
+                    onClick={() => handleClickBadge(QnaListType.ME)}
+                    word={"내질문"}
+                    isSelected={qnaListType === QnaListType.ME}
+                  />
                 </div>
-
-                <div className="h-1 w-full mt-2.5 border-t-2 border-solid" />
 
                 {qnas.length === 0 ? (
                   <div
@@ -302,12 +340,12 @@ export default function DetailPage() {
                   qnas.map((qna: GetQnaListResponse) => (
                     <div className="mb-[30px] md:mb-[50px]" key={qna.public_id}>
                       {qna.is_secret && qna.questioner_public_id !== publicId ? (
-                        <div className="w-4/5 bg-neutral-100 shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
+                        <div className="w-4/5 bg-[#E4F7EF] shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
                           <div className="w-full h-full blur-[7px]">
                             <div style={{ display: "flex" }}>
                               <span className="text-xl mr-[5px] -mt-1">Q.</span>
                               <TextareaAutosize
-                                className="outline-none text-sm md:text-base bg-neutral-100 box-border w-full h-full resize-none border-[none]"
+                                className="outline-none text-sm md:text-base bg-[#E4F7EF] box-border w-full h-full resize-none border-[none]"
                                 readOnly
                                 value={qna.question_text}
                               />
@@ -320,17 +358,17 @@ export default function DetailPage() {
                               qna.created_at
                             }`}</div>
                           </div>
-                          <div className="text-2xl break-keep absolute -translate-x-2/4 -translate-y-2/4 z-[1] text-center font-bold left-2/4 top-2/4">
-                            비밀 질문이에요.
+                          <div className="text-[#495057] text-2xl break-keep absolute -translate-x-2/4 -translate-y-2/4 z-[1] text-center font-bold left-2/4 top-2/4">
+                            비밀 질문이에요 🤫
                           </div>
                         </div>
                       ) : (
                         <div>
-                          <div className="w-4/5 bg-neutral-100 shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
+                          <div className="w-4/5 bg-[#E4F7EF] shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
                             <div style={{ display: "flex" }}>
                               <span className="text-xl mr-[5px] -mt-1">Q.</span>
                               <TextareaAutosize
-                                className="outline-none text-sm md:text-base bg-neutral-100 box-border w-full h-full resize-none border-[none]"
+                                className="outline-none text-sm md:text-base bg-[#E4F7EF] box-border w-full h-full resize-none border-[none]"
                                 readOnly
                                 value={qna.question_text}
                               />
@@ -351,11 +389,11 @@ export default function DetailPage() {
                       {qna.answer_text ? (
                         publicId === qna.questioner_public_id ? (
                           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <div className="w-4/5 bg-neutral-100 shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
+                            <div className="w-4/5 bg-[#F7F8F9] shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
                               <div style={{ display: "flex" }}>
                                 <span className="text-xl mr-[5px] -mt-1">A.</span>
                                 <TextareaAutosize
-                                  className="outline-none text-sm md:text-base bg-neutral-100 box-border w-full h-full resize-none border-[none]"
+                                  className="outline-none text-sm md:text-base bg[#F7F8F9] box-border w-full h-full resize-none border-[none]"
                                   readOnly
                                   value={qna.answer_text}
                                 />
@@ -371,12 +409,12 @@ export default function DetailPage() {
                           </div>
                         ) : (
                           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <div className="w-4/5 bg-neutral-100 shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
+                            <div className="w-4/5 bg-[#F7F8F9] shadow-[0px_4px_8px_rgba(0,0,0,0.2)] md:w-3/5 relative mt-5 p-5">
                               <div className="w-full h-full blur-[7px]">
                                 <div style={{ display: "flex" }}>
                                   <span className="text-xl mr-[5px] -mt-1">A.</span>
                                   <TextareaAutosize
-                                    className="text-sm md:text-base bg-neutral-100 box-border w-full h-full resize-none border-[none]"
+                                    className="text-sm md:text-base bg-[#F7F8F9] box-border w-full h-full resize-none border-[none]"
                                     readOnly
                                     value={qna.answer_text}
                                   />
@@ -387,10 +425,10 @@ export default function DetailPage() {
                                   style={{ color: "var(--gray-color)", display: "flex", justifyContent: "flex-end" }}
                                 >{`품앗이꾼 ${account?.name}`}</div>
                               </div>
-                              <div className="text-2xl break-keep absolute -translate-x-2/4 -translate-y-2/4 z-[1] text-center font-bold left-2/4 top-2/4">
+                              <div className="text-[#495057] text-2xl break-keep absolute -translate-x-2/4 -translate-y-2/4 z-[1] text-center font-bold left-2/4 top-2/4">
                                 {accountToken
-                                  ? "답변은 본인만 확인할 수 있어요 :)"
-                                  : "답변을 보려면 로그인을 해주세요 :)"}
+                                  ? "답변은 본인만 확인할 수 있어요 👀"
+                                  : "답변을 보려면 로그인을 해주세요 👀"}
                               </div>
                             </div>
                           </div>

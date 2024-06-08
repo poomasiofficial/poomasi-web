@@ -43,7 +43,7 @@ const CoteDiaryPage = () => {
                     조금씩 성장하고 있는 나를 발견할 수 있을 거에요.
                   </span>
                   <Link href="/cote-diary/post">
-                    <button className="bg-[#F7F8F9] rounded-xl w-[300px] h-[56px] border-solid border-[1px] border-[#C8C8C8] font-semibold">
+                    <button className="bg-[#F7F8F9] rounded-xl w-[300px] h-[56px] border-solid border-[1px] border-[#159A00] font-semibold text-[#159A00]">
                       코테일기 작성하기
                     </button>
                   </Link>
