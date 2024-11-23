@@ -1,47 +1,62 @@
 {
-  "name": "poomasi-web",
-  "version": "0.1.0",
+  "name": "poomasi",
+  "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
-    "test:watch": "jest --watch"
-  },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.15.14",
-    "@mui/x-date-pickers": "^7.1.0",
-    "@next/third-parties": "^14.1.4",
-    "axios": "^1.6.8",
-    "cheerio": "^1.0.0-rc.12",
-    "dayjs": "^1.11.10",
-    "next": "^14.1.4",
-    "node-fetch": "^3.3.2",
-    "react": "^18",
-    "react-countup": "^6.5.3",
-    "react-dom": "^18",
+    "@mui/icons-material": "^5.15.6",
+    "@mui/material": "^5.15.2",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.69",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "axios": "^1.6.7",
+    "install": "^0.13.0",
+    "npm": "^10.4.0",
+    "react": "^18.2.0",
+    "react-countup": "^6.5.0",
+    "react-dom": "^18.2.0",
     "react-ga4": "^2.1.0",
+    "react-router-dom": "^6.21.1",
+    "react-scripts": "5.0.1",
+    "react-textarea-autosize": "^8.5.3",
     "recoil": "^0.7.7",
     "rxjs": "^7.8.1",
-    "ts-node": "^10.9.2"
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.2",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.1.4",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
-  }
+    "@craco/craco": "^7.1.0",
+    "gh-pages": "2.2.0"
+  },
+  "homepage": "https://poomasi.github.io"
 }

@@ -1,5 +1,5 @@
 #!/bin/sh
 cd ../
 mkdir output
-cp -R ./poomasi-web/* ./output
-cp -R ./output ./poomasi-web/
+cp -R ./poomasi.github.io/* ./output
+cp -R ./output ./poomasi.github.io/
