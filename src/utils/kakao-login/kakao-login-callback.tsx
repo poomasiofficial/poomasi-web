@@ -27,7 +27,7 @@ export function KakaoLoginCallback() {
             const beforeLoginUrl: string | null = localStorage.getItem('before_login_url')
             localStorage.removeItem('before_login_url')
 
-            window.location.href = beforeLoginUrl ? beforeLoginUrl : 'https://poomasi.me'
+            window.location.href = beforeLoginUrl ? beforeLoginUrl : 'https://poomasi.kr'
           })()
         } catch (error: any) {
           console.log(error)

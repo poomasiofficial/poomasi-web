@@ -5,7 +5,7 @@ export function TitleSection() {
     <Container>
       <Title>대학생 전문 상담 멘토링,</Title>
       <Title style={{ fontWeight: 'bold' }}>품앗이</Title>
-      <Link href="https://poomasi.me/">https://poomasi.me/</Link>
+      <Link href="https://poomasi.kr/">https://poomasi.kr/</Link>
     </Container>
   )
 }
