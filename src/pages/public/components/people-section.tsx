@@ -44,7 +44,7 @@ export function PeopleSection() {
               else return account.field === selectedField
             })
             .map((account) => (
-              <ProfileCard key={account.id} profileData={account} />
+              <ProfileCard key={account.nickname} profileData={account} />
             ))}
         </PeopleContainer>
       </div>

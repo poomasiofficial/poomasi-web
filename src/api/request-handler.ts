@@ -31,5 +31,5 @@ instance.interceptors.response.use(
 
 export default async function <T>(args: AxiosRequestConfig): Promise<T> {
   const { data } = await instance(args)
-  return data
+  return data['data']
 }

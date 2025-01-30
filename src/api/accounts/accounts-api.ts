@@ -6,10 +6,7 @@ const PATH = '/accounts'
 
 export const AccountsApi = {
   postKakaoLogin: async (idToken: string) => {
-    const form: FormData = new FormData()
-    form.append('id_token', idToken)
-
-    return await requestHandler<KakaoLoginResponse>({ url: PATH + '/kakao-login/', method: HttpMethod.POST, data: form })
+    return await requestHandler<KakaoLoginResponse>({ url: PATH + '/kakao-login', method: HttpMethod.POST, data: { id_token: idToken } })
   },
 
   getAccountList: async (type: string = AccountType.ADMIN) => {

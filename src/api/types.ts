@@ -7,7 +7,7 @@ export interface KakaoLoginResponse {
 }
 
 export interface AccountListResponse {
-  id: string
+  nickname: string
   name: string
   profile_image: string
   field: string
@@ -42,5 +42,5 @@ export interface GetQnaListResponse {
 
 export interface GetQnaStatusResponse {
   account_count: number
-  qna_count: number
+  post_count: number
 }

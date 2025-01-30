@@ -5,7 +5,7 @@ import { CardActionArea } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 interface ProfileData {
-  id: string
+  nickname: string
   profile_image: string
   name: string
   field: string
@@ -23,8 +23,8 @@ interface Props {
 export function ProfileCard({ profileData }: Props) {
   const navigate = useNavigate()
 
-  const handleProfileClick = (id: string) => {
-    navigate(`/${id}`)
+  const handleProfileClick = (nickname: string) => {
+    navigate(`/${nickname}`)
   }
 
   return (
@@ -55,7 +55,7 @@ export function ProfileCard({ profileData }: Props) {
           </TextBlurOverlay>
         </div>
       ) : (
-        <CardConent onClick={() => handleProfileClick(profileData.id)}>
+        <CardConent onClick={() => handleProfileClick(profileData.nickname)}>
           <ProfilePictureWrapper>
             <ProfileImage src={profileData.profile_image} alt={'profile-image'} />
           </ProfilePictureWrapper>

@@ -12,7 +12,7 @@ export function DescriptionSection() {
       try {
         const qnaStaus = await RequestApi.posts.getQnaStatus()
         setAccountCount(qnaStaus.account_count)
-        setQnaCount(qnaStaus.qna_count)
+        setQnaCount(qnaStaus.post_count)
       } catch (error: any) {
         setAccountCount(85)
         setQnaCount(37)
