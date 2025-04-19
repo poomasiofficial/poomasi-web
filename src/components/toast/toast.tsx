@@ -2,7 +2,7 @@ import * as React from 'react'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import { SetterOrUpdater, useRecoilValue, useSetRecoilState } from 'recoil'
-import { errorToastMessageState, isErrorToastOpenState, isSuccessToastOpenState, successToastMessageState } from '@store'
+import { errorToastMessageState, isErrorToastOpenState, isSuccessToastOpenState, successToastMessageState } from '../../store'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -17,7 +17,7 @@ export function Toast() {
   const setIsSuccessToastOpen: SetterOrUpdater<boolean> = useSetRecoilState(isSuccessToastOpenState)
   const successToastMessage: string = useRecoilValue(successToastMessageState)
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = () => {
     setIsErrorToastOpen(false)
     setIsSuccessToastOpen(false)
   }

@@ -1,35 +1,39 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
-const getPoomasiAccountToken = (): string | null => {
-  return localStorage.getItem('account_token')
-}
-
 const instance: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: import.meta.env.VITE_POOMASI_BACEND_BASE_URL,
   timeout: 3000,
 })
 
 instance.interceptors.request.use(
   (config) => {
-    const account_token = getPoomasiAccountToken()
-
-    if (account_token) {
-      config.headers.Authorization = account_token
-    }
-
     return config
   },
-  (error) => {}
+  (error) => {
+    console.log(error)
+  }
 )
 
 instance.interceptors.response.use(
   (response) => {
     return response
   },
-  (error) => {}
+  (error) => {
+    console.log(error)
+    return Promise.reject(error)
+  }
 )
 
 export default async function <T>(args: AxiosRequestConfig): Promise<T> {
   const { data } = await instance(args)
-  return data['data']
+  return data
 }
+
+/*
+에러메세지:
+TypeError: Cannot destructure property 'data' of 'undefined' as it is undefined.
+
+원인: const { data } = await instance(args) 이 코드에서 instance(args)의 결과가 undefined라서 data를 꺼낼 수 없다
+
+
+*/

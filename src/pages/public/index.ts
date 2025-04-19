@@ -1,2 +1,6 @@
-export * from './landing-page'
-export * from './detail-page'
+export * from './LandingPage.tsx'
+export * from './login-page'
+export * from '@components/LandingPage/ui/web/ProfilesSection.tsx'
+export * from '../../components/profileCards/ProfileCard.tsx'
+// export * from './DetailPage/DetailPage.tsx'
+// export * from './footer-section'

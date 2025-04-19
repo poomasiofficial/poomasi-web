@@ -12,13 +12,18 @@ export enum AccountType {
 }
 
 export enum CareerYearType {
-  대학생 = 'U',
-  취준생 = 'R',
-  신입_3년차 = 'N',
-  _3년차_이상 = 'S',
+  ACADEMIC = 'U',
+  JOB_SEEKER = 'R',
+  JUNIOR = 'N',
+  MIDDLE = 'S',
 }
 
-export enum QnaListType {
+export enum AskerSpecificType {
+  SPECIALTY = 'SPECIALTY',
+  NONE_SPECIALTY = 'NONE_SPECIALTY',
+}
+
+export enum QnaAskerType {
   ALL = 'ALL',
   ME = 'ME',
 }

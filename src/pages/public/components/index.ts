@@ -1,5 +1,0 @@
-export * from './title-section'
-export * from './description-section'
-export * from './people-section'
-export * from './footer-section'
-export * from './profile-card'

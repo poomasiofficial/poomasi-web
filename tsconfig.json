@@ -1,39 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ES2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src",
-    "paths": {
-      "@styles": ["./styles/index.ts"],
-      "@styles/*": ["./styles/*"],
-      "@routes": ["./routes/index.ts"],
-      "@routes/*": ["./routes/*"],
-      "@pages": ["./pages/index.ts"],
-      "@pages/*": ["./pages/*"],
-      "@components": ["./components/index.ts"],
-      "@components/*": ["./components/*"],
-      "@store": ["./store/index.ts"],
-      "@store/*": ["./store/*"],
-      "@hooks": ["./hooks/index.ts"],
-      "@hooks/*": ["./hooks/*"],
-      "@utils": ["./utils/index.ts"],
-      "@utils/*": ["./utils/*"],
-      "@api": ["./api/index.ts"],
-      "@api/*": ["./api/*"]
-    }
-  },
-  "include": ["src"]
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }
