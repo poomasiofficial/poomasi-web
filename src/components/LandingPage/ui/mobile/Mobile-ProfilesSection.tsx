@@ -37,7 +37,7 @@ export function MobileProfilesSection() {
         </BadgeContainer>
       </SectionTitle>
       <PaginationBox>
-        {currentPage} / {totalPages}
+        <span style={{ color: '#3ecdba' }}>{currentPage}</span> / {totalPages}
       </PaginationBox>
       {/* useRef을 이용하며 특정 DOM 요소에 직접 useSwiper훅을 연결 */}
       <PoomProfileCardList ref={swiperRef}>
@@ -70,6 +70,9 @@ const ProfilesSectionContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  @media (max-width: 767px) {
+    margin-bottom: 60px;
+  }
 `
 
 const SectionTitle = styled.div`
@@ -79,6 +82,9 @@ const SectionTitle = styled.div`
   align-items: flex-start;
   width: 100%;
   gap: ${getMobileVw(20)};
+  @media (max-width: 767px) {
+    gap: 1rem;
+  }
 `
 
 const SubHead = styled.div`
@@ -93,7 +99,7 @@ const BadgeContainer = styled.div`
   display: flex;
   overflow-x: auto;
   white-space: nowrap;
-  gap: ${getMobileVw(10)};
+  gap: 3px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 
@@ -114,9 +120,9 @@ const PoomProfileCardList = styled.div`
   width: 100%;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: ${getMobileVw(5)};
+  gap: ${getMobileVw(30)};
   padding-bottom: ${getMobileVw(16)};
-  padding-left: ${getMobileVw(20)}; // 💡 카드 시작 여백
+  /* padding-left: ${getMobileVw(20)};  */
   padding-right: ${getMobileVw(20)};
   -webkit-overflow-scrolling: touch;
 

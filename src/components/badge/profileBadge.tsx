@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button'
-import { getMobileVh } from '@utils/responsive'
 
 interface ProfileBadgeProps {
   badgeString: string
@@ -20,6 +19,7 @@ export function ProfileBadge({ badgeString, onClick, selected }: ProfileBadgePro
         color: selected ? '#3ECDBA' : '#9B9EA2',
         backgroundColor: selected ? '#EBFFFC' : '#F7F7F7',
         ...badgeMobileStyles(selected ?? false),
+        boxShadow: 'none',
       }}
     >
       #{badgeString}
@@ -29,10 +29,10 @@ export function ProfileBadge({ badgeString, onClick, selected }: ProfileBadgePro
 
 const badgeMobileStyles = (selected: boolean) => ({
   '@media (max-width: 767px)': {
-    fontSize: getMobileVh(13),
+    fontSize: '.75rem',
     padding: '4px 12px',
     borderRadius: '20px',
-    fontWeight: 'bold',
+    fontWeight: '700',
     minWidth: 'auto',
     whiteSpace: 'nowrap',
     border: selected ? '1.5px solid #3ECDBA' : 'none',
