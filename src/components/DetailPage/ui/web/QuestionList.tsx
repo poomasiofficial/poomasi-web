@@ -8,17 +8,20 @@ import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import { RequestApi } from '@api/request-api.ts'
 import { useDetailPageContext } from '@components/DetailPage/model/provider/DetailPageProvider.tsx'
-import { useAccountStore } from '@store/account'
 import { useParams } from 'react-router-dom'
 import { QuestionCard } from '@components/DetailPage/ui/web/QuestionCard.tsx'
 import { AnswerCard } from '@components/DetailPage/ui/web/AnswerCard.tsx'
+import { QuestionAnswerModal } from '@components/DetailPage/ui/web/QuestionAnswerModal.tsx'
+import { useAccountStore } from '@store/account'
 
 export function QuestionList() {
   const { id } = useParams()
-  const { teacherAccount } = useDetailPageContext()
-  const { publicId } = useAccountStore()
+  const { publicId, accountType } = useAccountStore()
+  const { teacherAccount, isQuestionListFetched, setIsQuestionListFetched } = useDetailPageContext()
   const [qnaDataList, setQnaDataList] = useState<GetQnaListResponse[]>([]) //Q&A 리스트 상태관리
   const [qnaAskerType, setQnaAskerType] = useState<QnaAskerType>(QnaAskerType.ALL) //QnA 필터 상태 관리
+  const [answerModalData, setAnswerModalData] = useState<GetQnaListResponse | null>(null)
+  const [isAnswerAuthority, setIsAnswerAuthority] = useState<boolean>(false)
 
   const getTeacherQnaList = async () => {
     try {
@@ -31,22 +34,25 @@ export function QuestionList() {
     }
   }
 
-  const getIsSecretQuestion = (qna: GetQnaListResponse) => {
-    // 비밀질문이 아닌 경우 모두 확인 가능
-    if (qna.is_secret === 0) {
-      return false
-    }
-
-    // 비밀질문인 경우, 본인만 확인가능
-    if (qna.is_secret === 1) {
-      return qna.questioner_public_id !== publicId
-    }
-    return true
+  const handleAnswerModalOpenClick = (question: GetQnaListResponse) => {
+    setAnswerModalData(question)
   }
 
   useEffect(() => {
     getTeacherQnaList()
   }, [id, qnaAskerType])
+
+  useEffect(() => {
+    if (teacherAccount) {
+      setIsAnswerAuthority(teacherAccount.public_id === publicId && accountType === 'ADMIN')
+    }
+  }, [teacherAccount])
+
+  useEffect(() => {
+    if (isQuestionListFetched) {
+      getTeacherQnaList().finally(() => setIsQuestionListFetched(false))
+    }
+  }, [isQuestionListFetched])
 
   return (
     <QuestionListBody>
@@ -84,13 +90,10 @@ export function QuestionList() {
       ) : (
         qnaDataList.map((qna) => (
           <QnaSection key={qna.public_id}>
-            <QuestionCard
-              questionText={qna.question_text}
-              careerYear={qna.career_year}
-              isMajor={qna.is_major === 0}
-              createdAt={qna.created_at}
-              isSecretQuestion={getIsSecretQuestion(qna)}
-            />
+            <QuestionArea>
+              <QuestionCard question={qna} key={qna.public_id} />
+              {isAnswerAuthority && <QuestionAnswerButton onClick={() => handleAnswerModalOpenClick(qna)}>댓글 달기</QuestionAnswerButton>}
+            </QuestionArea>
 
             {qna.answer_text && (
               <AnswerCard answerText={qna.answer_text} isMyAnswer={publicId === qna.questioner_public_id} teacherName={teacherAccount?.name ?? ''} />
@@ -98,6 +101,7 @@ export function QuestionList() {
           </QnaSection>
         ))
       )}
+      {answerModalData !== null && <QuestionAnswerModal question={answerModalData} setAnswerModalClose={() => setAnswerModalData(null)} />}
     </QuestionListBody>
   )
 }
@@ -125,9 +129,26 @@ const QnaSection = styled.div`
   }
 `
 
-// const BlurOverlay = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   filter: blur(7px);
-//   -webkit-filter: blur(7px);
-// `
+const QuestionArea = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: end;
+  gap: 20px;
+`
+
+const QuestionAnswerButton = styled.div`
+  display: inline-flex;
+  padding: 12px 16px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+  background: #b2ebe3;
+
+  color: #08ae98;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+`
