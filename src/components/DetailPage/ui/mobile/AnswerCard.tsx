@@ -12,7 +12,7 @@ interface AnswerCardProps {
   answerDate: string
 }
 
-export function AnswerCard({ answerText, isBlurred, teacherName, answerDate }: AnswerCardProps) {
+export function AnswerCard({ answerText, isBlurred, answerDate }: AnswerCardProps) {
   const { accountToken } = useAccountStore()
   const { teacherAccount } = useDetailPageContext()
 
@@ -21,28 +21,25 @@ export function AnswerCard({ answerText, isBlurred, teacherName, answerDate }: A
       <QnaCard>
         {isBlurred && (
           <BlurOverlay>
-            <TextBlurOverlay>{accountToken ? '비밀 답변이예요' : '답변을 보려면 로그인을 해주세요 :)'}</TextBlurOverlay>
+            <TextBlurOverlay>{accountToken ? '비밀 답변이에요' : '답변을 보려면 로그인을 해주세요 :)'}</TextBlurOverlay>
           </BlurOverlay>
         )}
-        <QnaHead>
+        <QnaHead className="QnaHead">
           {' '}
           <AnswerImg src={teacherAccount?.profile_image} />
-          <span>{teacherAccount?.name}</span>
+          <TeacherName>{teacherAccount?.name}</TeacherName>
         </QnaHead>
         <QnaContentArea readOnly value={answerText} />
         <AnswerDate>{dayjs(answerDate).format('YYYY-MM-DD')}</AnswerDate>
-
-        <div
-          style={{
-            color: 'var(--gray-color)',
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >{`품앗이꾼 ${teacherName}`}</div>
       </QnaCard>
     </div>
   )
 }
+
+const TeacherName = styled.div`
+  font-size: 14px;
+  color: #0e0e0e;
+`
 
 const AnswerDate = styled.div`
   color: var(--gray-color);
@@ -83,23 +80,17 @@ const QnaCard = styled(Card)`
   flex-direction: column;
   gap: 32px;
 
-  @media (max-width: 520px) {
+  @media (max-width: 1024px) {
     width: 80%;
+    box-shadow: none;
+    border-radius: 20px;
   }
 `
 
 const QnaHead = styled.div`
-  width: 54px;
-  height: 54px;
-  border-radius: 100%;
-
   display: flex;
-  justify-content: center;
-  background: #3ecdba;
-
-  color: #ffffff;
-
-  font-size: 32px;
+  align-items: center;
+  gap: 5px;
 `
 
 const QnaContentArea = styled(TextareaAutosize)`
@@ -118,7 +109,8 @@ const QnaContentArea = styled(TextareaAutosize)`
   line-height: 150%;
 
   @media (max-width: 1024px) {
-    font-size: 1rem;
+    font-size: 14px;
+    color: #2c3741;
   }
 `
 
@@ -139,12 +131,26 @@ const BlurOverlay = styled.div`
 const TextBlurOverlay = styled.div`
   font-size: 24px;
   word-break: keep-all;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  top: 50%;
+  left: 50%;
   text-align: center;
   font-weight: bold;
-  z-index: 11;
-  padding: 0 20px;
+  color: #fff;
+  background-color: rgba(78, 80, 83, 0.7);
+  padding: 16px;
+  height: 38px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  @media (max-width: 520px) {
-    font-size: 18px;
+  @media (max-width: 1024px) {
+    font-size: 0.875rem;
+    font-weight: 400;
   }
 `
