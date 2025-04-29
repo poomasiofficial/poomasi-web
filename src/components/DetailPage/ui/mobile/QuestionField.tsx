@@ -12,6 +12,7 @@ import { colors } from '@styles/foundation/color'
 import { Seperator } from '@components/seperator/Seperator'
 import { useMobileStore } from '@store/useMobileStore.ts'
 import { useKeyboardHeight } from '@components/DetailPage/model/hooks/usekeyboardHeight'
+// import { Padding } from '@mui/icons-material'
 
 const QUESTION_MAX_LENGTH: number = 500
 
@@ -155,8 +156,9 @@ export function QuestionField() {
             backgroundColor: '#3ecdba',
             '@media (max-width:1024px)': {
               width: '100%',
-              boxShadow: 'none',
+              boxShadow: 'none !important',
               height: '48px',
+              padding: '16px 20px',
             },
             ...(isMobile && keyboardHeight > 0
               ? {
@@ -236,14 +238,19 @@ const QuestionTextField = styled.textarea`
   box-shadow: none !important;
 
   // element 폰트 요소
-  color: #9b9ea2;
+  color: #28292a;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%;
 
+  &::placeholder {
+    color: #9b9ea2;
+  }
+
   @media (max-width: 1024px) {
     border-width: 0 0 0 0;
+    font-weight: 400;
   }
 `
 
