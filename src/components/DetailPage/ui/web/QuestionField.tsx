@@ -1,10 +1,10 @@
-import { AskerSpecificType, CareerYearType } from '@api/enums.ts'
+import { AskerSpecificType, CareerYearType } from '@utils/api/enums.ts'
 import { DebouncedButton } from '@components/button'
 import { useCallback, useState } from 'react'
 import { useToastMessageStore } from '@store/toast'
 import { useAccountStore } from '@store/account'
-import { RequestApi } from '@api/request-api.ts'
-import { useParams } from 'react-router-dom'
+// import { RequestApi } from '@utils/api/request-api.ts'
+// import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { getMobileVw } from '@utils/responsive'
 import optionCheck from '@assets/images/option-check.svg'
@@ -12,7 +12,10 @@ import { colors } from '@styles/foundation/color'
 import { useMobileStore } from '@store/useMobileStore.ts'
 import { useKeyboardHeight } from '@components/DetailPage/model/hooks/usekeyboardHeight'
 import { useDetailPageContext } from '@components/DetailPage/model/provider/DetailPageProvider.tsx'
-import { CommonSelect } from '@components/common/CommonSelect/CommonSelect.tsx'
+import { CommonSelect } from '@components/CommonSelect/CommonSelect'
+import { usePostQuestion } from '@utils/api/posts/usePostQuestion'
+import { CAREER_YEAR_OPTIONS, SPECIFIC_TYPE_OPTIONS } from '@utils/api/enums'
+import { useParams } from 'react-router-dom'
 
 const QUESTION_MAX_LENGTH: number = 500
 
@@ -39,38 +42,36 @@ export function QuestionField() {
     setIsSecret((prev: boolean) => !prev)
   }
 
-  // Tanstack Query의 useMutation을 사용하면, API 요청을 더 간편하게 처리할 수 있습니다.
-  const postingQuestion = async () => {
-    try {
-      //질문 데이터를 서버에 등록
-      await RequestApi.posts.postQna({ id, isSecret, careerYear, isMajor, questionText })
-
-      //질문 등록 후, 리셋
+  const { mutate: postQuestionToServer } = usePostQuestion(
+    () => {
       setQuestionText('')
       setIsSecret(false)
       setCareerYear(CareerYearType.ACADEMIC)
       setIsMajor(true)
+      setIsQuestionListFetched(true) //질문목록 다시 불러오기
 
       setTimeout(() => {
         setSuccessToastMessage('질문이 등록되었습니다.')
-        setIsQuestionListFetched(true)
       }, 1300)
-
-      //질문 목록 불러오기
-      /*const qnas = await RequestApi.posts.getQnaList(qnaAskerType, id)
-			setQnas(qnas.data) // UI에 반영*/
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('질문 등록에 실패했습니다!', error)
-      }
-
+    },
+    () => {
       setErrorToastMessage('질문 등록에 실패했습니다!')
-    }
-  }
+    },
+  )
 
-  // 팁 !
-  // function 재랜더링 되지 않도록 함.
-  // 관련하여, 오버 엔지리어닝이 되는 경우도 있다하니 관련 내용은 고민해보도록 하겠습니다.
+  const postQuestion = useCallback(() => {
+    // console.log('nickname:', nickname)
+    // if (!nickname) return
+    if (!id) return
+    postQuestionToServer({
+      nickname: id,
+      isSecret,
+      careerYear,
+      isMajor,
+      questionText,
+    })
+  }, [id, isSecret, careerYear, isMajor, questionText, postQuestionToServer])
+
   const handleQuestionButtonClick = useCallback(async () => {
     if (!accessToken) {
       setErrorToastMessage('질문하려면 로그인이 필수입니다!')
@@ -82,9 +83,8 @@ export function QuestionField() {
       return
     }
 
-    // 질문 등록
-    await postingQuestion()
-  }, [accessToken, questionText])
+    postQuestion()
+  }, [accessToken, questionText, postQuestion, setErrorToastMessage])
 
   return (
     <QuestionSection className="QuestionSection">
@@ -95,21 +95,13 @@ export function QuestionField() {
             title={'개발 경력'}
             value={careerYear}
             onChange={(selectValue) => setCareerYear(selectValue as CareerYearType)}
-            options={[
-              { value: CareerYearType.ACADEMIC, label: '대학생' },
-              { value: CareerYearType.JOB_SEEKER, label: '취준생' },
-              { value: CareerYearType.JUNIOR, label: '신입~3년차' },
-              { value: CareerYearType.MIDDLE, label: '3년차 이상' },
-            ]}
+            options={CAREER_YEAR_OPTIONS}
           />
           <CommonSelect
             title={'전공 사항'}
             value={isMajor ? AskerSpecificType.SPECIALTY : AskerSpecificType.NONE_SPECIALTY}
             onChange={(selectValue) => setIsMajor(selectValue === AskerSpecificType.SPECIALTY)}
-            options={[
-              { value: AskerSpecificType.SPECIALTY, label: '전공자' },
-              { value: AskerSpecificType.NONE_SPECIALTY, label: '비전공자' },
-            ]}
+            options={SPECIFIC_TYPE_OPTIONS}
           />
         </SelectContainer>
       </AskerInfo>
@@ -210,7 +202,6 @@ const QuestionTextField = styled.textarea`
   box-shadow: none !important;
   border-bottom: 1px solid #eaebed;
 
-  // element 폰트 요소
   color: #28292a;
   font-size: 16px;
   font-style: normal;

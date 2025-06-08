@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { REDIRECT_URI, REST_API_KEY } from './variables'
-import { RequestApi } from '@api/request-api'
+import { RequestApi } from '@utils/api/request-api'
 import { useNavigate } from 'react-router-dom'
 import { useAccountStore } from '@store/account'
 import { useToastMessageStore } from '@store/toast'
@@ -60,9 +60,6 @@ export function KakaoLoginCallback() {
       setPublicId(publicId)
       setaccessToken(accessToken)
       setAccountType(accountTypeFromToken)
-      // setPublicId(kakaoLoginResponse.data.public_id)
-      // setaccessToken(kakaoLoginResponse.data.account_token)
-      // setAccountType(kakaoLoginResponse.data.account_type)
 
       // 로그인 전 방문했던 URL 확인 후 이동 (없으면 기본값)
       const beforeLoginUrl = localStorage.getItem('before_login_url')

@@ -1,45 +1,64 @@
 import dayjs from 'dayjs'
-import { CareerYearType } from '@api/enums.ts'
-import { useCallback } from 'react'
+import { CareerYearType } from '@utils/api/enums.ts'
 import styled from '@emotion/styled'
 import Card from '@mui/material/Card'
 import TextareaAutosize from 'react-textarea-autosize'
-import { useAccountStore } from '@store/account'
 import { colors } from '@styles/foundation/color'
-import { GetQnaListResponse } from '@api/types'
+import { GetQnaListResponse } from '@utils/api/types/qna.type'
+import { useAccountStore } from '@store/account'
+// import { getMobileVw } from '@utils/responsive'
+import { useQuestionEdit, useIsOwner } from '@components/DetailPage/model/hooks/'
+import { EditButton } from '@components/button/editButton/EditButton'
+import { EditActionButtons } from '@components/button/editButton/EditActionButtons'
 
 type QuestionCardProps = {
   question: GetQnaListResponse
   isSecret?: boolean
+  onUpdateRequest?: () => void
+}
+export const getCareerYearString = (career_year: string) => {
+  switch (career_year) {
+    case CareerYearType.ACADEMIC:
+      return '대학생'
+    case CareerYearType.JOB_SEEKER:
+      return '취준생'
+    case CareerYearType.JUNIOR:
+      return '신입~3년차'
+    case CareerYearType.MIDDLE:
+      return '3년차 이상'
+    default:
+      return '대학생'
+  }
 }
 
-export function QuestionCard({ question, isSecret }: QuestionCardProps) {
+export function QuestionCard({ question, isSecret, onUpdateRequest }: QuestionCardProps) {
   const { accessToken } = useAccountStore()
-  const getCareerYearString = useCallback((career_year: string) => {
-    switch (career_year) {
-      case CareerYearType.ACADEMIC:
-        return '대학생'
-      case CareerYearType.JOB_SEEKER:
-        return '취준생'
-      case CareerYearType.JUNIOR:
-        return '신입~3년차'
-      case CareerYearType.MIDDLE:
-        return '3년차 이상'
-      default:
-        return '대학생'
-    }
-  }, [])
+  const isTheOwner = useIsOwner(question.questioner_public_id)
+
+  const { isEditing, editedText, showEditBtn, toggleEditBtn, handleEditClick, handleCancelClick, handleTextChange, handleSaveClick } =
+    useQuestionEdit(question, onUpdateRequest)
 
   return (
-    <QnaCard>
+    <QnaCard className={'qna-card'}>
       {/* 비밀 질문 인 경우, 블러처리 */}
       {isSecret && (
         <BlurOverlay>
           <TextBlurOverlay>{accessToken ? '비밀 질문이에요' : '질문을 보려면 로그인을 해주세요 :)'}</TextBlurOverlay>
         </BlurOverlay>
       )}
+      {isTheOwner ? <EditButton onToggle={toggleEditBtn} onEditClick={handleEditClick} showEditBtn={showEditBtn} /> : null}
+
       <QnaHead>Q</QnaHead>
-      <QnaContentArea readOnly value={question.question_text} />
+      {isEditing ? (
+        <>
+          <StyledTextarea minRows={3} maxRows={50} value={editedText} onChange={handleTextChange} />
+
+          <EditActionButtons onSave={handleSaveClick} onCancel={handleCancelClick} />
+        </>
+      ) : (
+        <QnaContentArea readOnly value={question.question_text} />
+      )}
+
       <div style={{ display: 'flex' }}>
         <QnaContentCareer
           style={{
@@ -74,6 +93,18 @@ export function QuestionCard({ question, isSecret }: QuestionCardProps) {
     </QnaCard>
   )
 }
+const StyledTextarea = styled(TextareaAutosize)`
+  color: #28292a;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+  width: 100%;
+`
 
 const QnaCard = styled(Card)`
   background-color: #f5f5f5;
