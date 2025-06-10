@@ -32,6 +32,9 @@ const DotMenu = styled.img`
   height: 18px;
   cursor: pointer;
   user-select: none;
+  @media (max-width: 500px) {
+    width: auto;
+  }
 `
 
 const EditAction = styled.button`
@@ -52,5 +55,11 @@ const EditAction = styled.button`
   &:hover {
     background-color: #3ecdba;
     color: white;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    width: 100%;
   }
 `
