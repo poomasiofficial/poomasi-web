@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "ignoreDeprecations": "5.0", // optional
     "skipLibCheck": true,
@@ -18,21 +22,49 @@
     "incremental": true,
     "baseUrl": "src",
     "paths": {
-      "@app/*": ["app/*"],
-      "@api/*": ["api/*"],
-      "@assets/*": ["assets/*"],
-      "@components/*": ["components/*"],
-      "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@toast": ["store/toast/index.ts"],
-      "@types": ["types/index.ts"],
+      "@app/*": [
+        "app/*"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@toast": [
+        "toast/index.ts"
+      ],
+      "@types": [
+        "types/index.ts"
+      ],
       // "@types/*": ["types/*"],
-      "@public/*": ["public/*"],
-      "@images/*": ["assets/images/*"],
-      "@styles/*": ["styles/*"],
-      "@landingPage/*": ["components/landingPage/*"],
-      "@qnaPage/*": ["components/qnaPage/*"]
+      "@public/*": [
+        "public/*"
+      ],
+      "@images/*": [
+        "assets/images/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@landingPage/*": [
+        "components/landingPage/*"
+      ],
+      "@qnaPage/*": [
+        "components/qnaPage/*"
+      ]
     },
     "plugins": [
       {
@@ -40,6 +72,15 @@
       }
     ]
   },
-  "include": ["**/*.ts", "**/*.tsx", "./dist/types/**/*.ts", ".next/types/**/*.ts", "next-env.d.ts", "./.next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./dist/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "./.next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
