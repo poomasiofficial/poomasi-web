@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 /*
+>>>>>>> develop
 import { initializeApp } from 'firebase/app'
 import { getMessaging, getToken } from 'firebase/messaging'
 
@@ -40,4 +43,7 @@ export const requestForToken = async () => {
     console.log('토큰 발급 중 에러 발생:', err)
   }
 }
+<<<<<<< HEAD
+=======
 */
+>>>>>>> develop

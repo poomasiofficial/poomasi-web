@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+import { create } from 'zustand'
+
+type MobileStore = {
+  isMobile: boolean
+  setIsMobile: (isMobile: boolean) => void
+}
+
+export const useMobileStore = create<MobileStore>((set) => ({
+  isMobile: false,
+  setIsMobile: (isMobile: boolean) => set({ isMobile }),
+}))
+=======
 "use client";
 
 import { create } from "zustand";
@@ -12,6 +25,7 @@ export const useMobileStore = create<MobileStore>((set) => ({
 	isMobile: false,
 	setIsMobile: (isMobile: boolean) => set({ isMobile }),
 }));
+>>>>>>> develop
 // type MobileStore = {
 //   isMobile: boolean
 // }
